@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"store/entities"
+	"github.com/fatih/color"
 )
 
 func main() {
@@ -16,5 +17,6 @@ func main() {
 	r.HandleFunc("/item/{id}", entities.ItemUpdate).Methods("PUT")
 	r.HandleFunc("/item/{id}", entities.ItemDelete).Methods("DELETE")
 
+	color.Green("Server started...")
 	http.ListenAndServe(":8070", r)
 }

@@ -3,8 +3,8 @@ package entities
 import (
 	"store/api"
 	"net/http"
-	"github.com/gorilla/mux"
 	"encoding/json"
+	"github.com/gorilla/mux"
 )
 
 type Item struct {
@@ -44,7 +44,9 @@ func ItemsGet(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
-	response, _ := json.Marshal(Item{}.GetAll())
+	response, _ := json.Marshal(map[string] []Item {
+		"data": Item{}.GetAll(),
+	})
 
 	w.Write(response)
 }
@@ -55,7 +57,10 @@ func ItemGet(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	vars := mux.Vars(r)
-	response, _ := json.Marshal(Item{}.Get(vars["id"]))
+	response, _ := json.Marshal(map[string] Item {
+		"data": Item{}.Get(vars["id"]),
+	})
+
 	w.Write(response)
 }
 
