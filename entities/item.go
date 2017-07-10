@@ -41,31 +41,50 @@ func (item Item) Delete() {
 
 // Get a specific item.
 func ItemsGet(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 
+	// Print out the
 	response, _ := json.Marshal(map[string] []Item {
 		"data": Item{}.GetAll(),
 	})
 
+	// Print the items.
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	w.Write(response)
 }
 
 // Get a specific item.
 func ItemGet(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-
+	// Pull a single item from the DB.
 	vars := mux.Vars(r)
 	response, _ := json.Marshal(map[string] Item {
 		"data": Item{}.Get(vars["id"]),
 	})
 
+	// Print the items.
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	w.Write(response)
 }
 
 func ItemPost(w http.ResponseWriter, r *http.Request) {
+	// Processing.
+	item := Item{}
+	json.NewDecoder(r.Body).Decode(&item)
+	id := item.Insert()
 
+	// Adding the ID to the object.
+	item.Id = id
+
+	// Prepare the display.
+	response, _ := json.Marshal(map[string] Item {
+		"data": item,
+	})
+
+	// Print, with style.
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
 }
 
 func ItemUpdate(w http.ResponseWriter, r *http.Request) {
