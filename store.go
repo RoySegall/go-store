@@ -10,7 +10,7 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/item", entities.ItemGet).Methods("GET")
+	r.HandleFunc("/item", entities.ItemsGet).Methods("GET")
 	r.HandleFunc("/item", entities.ItemPost).Methods("POST")
 	r.HandleFunc("/item/{id}", entities.ItemGet).Methods("GET")
 	r.HandleFunc("/item/{id}", entities.ItemUpdate).Methods("PUT")

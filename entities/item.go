@@ -3,14 +3,14 @@ package entities
 import (
 	"store/api"
 	"net/http"
-	"fmt"
 	"github.com/gorilla/mux"
+	"encoding/json"
 )
 
 type Item struct {
-	Id string
-	Title string
-	Price float64
+	Id 		string 	`json:"id,omitempty"`
+	Title string 	`json:"title"`
+	Price float64 `json:"price"`
 }
 
 // Insert an object.
@@ -39,15 +39,24 @@ func (item Item) Delete() {
 	api.Delete("item", item.Id)
 }
 
+// Get a specific item.
 func ItemsGet(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprint(w, "Hello!\n")
+
+	response, _ := json.Marshal(Item{}.GetAll())
+
+	w.Write(response)
 }
 
+// Get a specific item.
 func ItemGet(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Category: %v\n", vars["id"])
+
+	vars := mux.Vars(r)
+	response, _ := json.Marshal(Item{}.Get(vars["id"]))
+	w.Write(response)
 }
 
 func ItemPost(w http.ResponseWriter, r *http.Request) {
