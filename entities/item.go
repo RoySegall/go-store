@@ -5,7 +5,10 @@ import (
 	"net/http"
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/imdario/mergo"
 )
+
+const TABLE = "item"
 
 type Item struct {
 	Id 		string 	`json:"id,omitempty"`
@@ -15,12 +18,12 @@ type Item struct {
 
 // Insert an object.
 func (item Item) Insert() (string) {
-	return api.Insert("item", item)
+	return api.Insert(TABLE, item)
 }
 
 // Get a single object.
 func (item Item) Get(id string) (Item) {
-	res := api.Get("item", id)
+	res := api.Get(TABLE, id)
 	items := []Item{}
 	res.All(&items)
 	return items[0]
@@ -28,7 +31,7 @@ func (item Item) Get(id string) (Item) {
 
 // Get all the items.
 func (item Item) GetAll() ([]Item) {
-	res := api.GetAll("item")
+	res := api.GetAll(TABLE)
 	items := []Item{}
 	res.All(&items)
 	return items
@@ -36,7 +39,11 @@ func (item Item) GetAll() ([]Item) {
 
 // Delete an item.
 func (item Item) Delete() {
-	api.Delete("item", item.Id)
+	api.Delete(TABLE, item.Id)
+}
+
+func (item Item) Update() {
+	api.Update(TABLE, item)
 }
 
 // Get a specific item.
@@ -87,10 +94,49 @@ func ItemPost(w http.ResponseWriter, r *http.Request) {
 	w.Write(response)
 }
 
+// Update an item.
 func ItemUpdate(w http.ResponseWriter, r *http.Request) {
+	// Process variables.
+	vars := mux.Vars(r)
 
+	// Old object.
+	old_item := Item{}.Get(vars["id"])
+
+	// Process the new values and attach the ID to the object.
+	item := Item{}
+	json.NewDecoder(r.Body).Decode(&item)
+	if err := mergo.Merge(&item, old_item); err != nil {
+		panic(err)
+	}
+
+	// Updating.
+	item.Update()
+
+	// Prepare the display.
+	response, _ := json.Marshal(map[string] Item {
+		"data": item,
+	})
+
+	// Print, with style.
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
 }
 
+// Delete an item.
 func ItemDelete(w http.ResponseWriter, r *http.Request) {
+	// Process variables.
+	vars := mux.Vars(r)
 
+	// Delete the item.
+	Item{}.Get(vars["id"]).Delete()
+
+	response, _ := json.Marshal(map[string] string {
+		"result": "deleted",
+	})
+
+	// Print, with style.
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
 }

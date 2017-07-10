@@ -11,12 +11,19 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/item", entities.ItemsGet).Methods("GET")
-	r.HandleFunc("/item", entities.ItemPost).Methods("POST")
-	r.HandleFunc("/item/{id}", entities.ItemGet).Methods("GET")
-	r.HandleFunc("/item/{id}", entities.ItemUpdate).Methods("PUT")
-	r.HandleFunc("/item/{id}", entities.ItemDelete).Methods("DELETE")
+	r.HandleFunc("/api/item", entities.ItemsGet).Methods("GET")
+	r.HandleFunc("/api/item", entities.ItemPost).Methods("POST")
+	r.HandleFunc("/api/item/{id}", entities.ItemGet).Methods("GET")
+	r.HandleFunc("/api/item/{id}", entities.ItemUpdate).Methods("PATCH")
+	r.HandleFunc("/api/item/{id}", entities.ItemDelete).Methods("DELETE")
 
 	color.Green("Server started...")
-	http.ListenAndServe(":8070", r)
+
+	server := &http.Server{
+		Addr: ":8070",
+		Handler: r,
+	}
+
+	server.ListenAndServe()
+
 }

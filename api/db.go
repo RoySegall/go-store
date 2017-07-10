@@ -33,7 +33,7 @@ func Insert(table string, arg interface{}) (string) {
 }
 
 func Get(table string, id string) (*r.Cursor) {
-	res, err := r.Table(table).Filter(map[string]interface{}{
+	res, err := r.Table(table).Filter(map[string]interface{} {
 		"id": id,
 	}).Run(getSession())
 
@@ -46,6 +46,16 @@ func Get(table string, id string) (*r.Cursor) {
 
 func GetAll(table string) (*r.Cursor) {
 	res, err := r.Table(table).Run(getSession())
+
+	if err != nil {
+		panic(err)
+	}
+
+	return res
+}
+
+func Update(table string, object interface{}) (*r.Cursor) {
+	res, err := r.Table(table).Update(object).Run(getSession())
 
 	if err != nil {
 		panic(err)
