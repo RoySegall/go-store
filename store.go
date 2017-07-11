@@ -20,6 +20,9 @@ func main() {
 
 	// User.
 	r.HandleFunc("/api/user", entities.UserRegister).Methods("POST")
+	r.HandleFunc("/api/user", entities.UserUpdate).Methods("PATCH")
+	r.HandleFunc("/api/user/login", entities.UserLogin).Methods("POST")
+	r.HandleFunc("/api/user/token_refresh", entities.UserTokenRefresh).Methods("POST")
 
 	color.Green("Server started...")
 

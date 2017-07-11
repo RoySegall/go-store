@@ -154,3 +154,18 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 
 	w.Write(response)
 }
+
+// Login the user.
+func UserLogin(w http.ResponseWriter, r *http.Request) {
+
+}
+
+// Refreshing an old token.
+func UserTokenRefresh(w http.ResponseWriter, r *http.Request) {
+
+}
+
+// Update user details.
+func UserUpdate(w http.ResponseWriter, r *http.Request) {
+
+}
