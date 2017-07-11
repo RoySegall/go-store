@@ -11,11 +11,15 @@ func main() {
 
 	r := mux.NewRouter()
 
+	// Items.
 	r.HandleFunc("/api/item", entities.ItemsGet).Methods("GET")
 	r.HandleFunc("/api/item", entities.ItemPost).Methods("POST")
 	r.HandleFunc("/api/item/{id}", entities.ItemGet).Methods("GET")
 	r.HandleFunc("/api/item/{id}", entities.ItemUpdate).Methods("PATCH")
 	r.HandleFunc("/api/item/{id}", entities.ItemDelete).Methods("DELETE")
+
+	// User.
+	r.HandleFunc("/api/user", entities.UserRegister).Methods("POST")
 
 	color.Green("Server started...")
 

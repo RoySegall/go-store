@@ -4,14 +4,19 @@ import (
 	"time"
 	"github.com/dgrijalva/jwt-go"
 	"io/ioutil"
+	"net/http"
+	"encoding/json"
+	"golang.org/x/crypto/bcrypt"
+	"store/api"
+	"go/token"
 )
 
 type User struct {
-	Id string `json:"id,omitempty"`
+	Id string `gorethink:"id,omitempty"`
 	Username string `json:"title"`
 	Password string
 	Role Role `json:"role"`
-	Token string
+	Token Token
 }
 
 type Token struct {
@@ -73,4 +78,65 @@ func (token Token) Validate() (bool) {
 	}
 
 	return parsingResult.Valid
+}
+
+func (user User) Insert() (User, error) {
+
+	// Check if the user exists in the DB.
+	if true {
+		return nil, error("a")
+	}
+
+
+	// Generating the token object.
+	token := Token{}
+	token.Generate(user)
+	user.Token = token
+
+	// Set the role.
+	user.Role = Role{
+		Title: "Member",
+	}
+
+	// Insert into the DB.
+	id := api.Insert("user", user)
+	user.Id = id
+
+	return user, nil
+}
+
+// Register end point.
+func UserRegister(w http.ResponseWriter, r *http.Request) {
+	// Get a user input.
+	user := User{}
+	json.NewDecoder(r.Body).Decode(&user)
+
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+
+	// Construct a safe object.
+	clean_user := User {
+		Username: user.Username,
+		Password: string(bytes),
+	}
+
+	// Create the user.
+	clean_user, err := clean_user.Insert()
+
+	// Print the items.
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	var response []byte
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		response, _ = json.Marshal(map[string] error {
+			"data": err,
+		})
+	} else {
+		response, _ = json.Marshal(map[string] User {
+			"data": clean_user,
+		})
+	}
+
+	w.Write(response)
 }

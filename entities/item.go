@@ -9,9 +9,9 @@ import (
 )
 
 type Item struct {
-	Id 		string 	`json:"id,omitempty"`
-	Title string 	`json:"title"`
-	Price float64 `json:"price"`
+	Id 		string 	`gorethink:"id,omitempty"`
+	Title string 	`gorethink:"title"`
+	Price float64 `gorethink:"price"`
 }
 
 // Insert an object.
