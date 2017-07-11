@@ -8,7 +8,7 @@ import (
 	"encoding/json"
 	"golang.org/x/crypto/bcrypt"
 	"store/api"
-	"go/token"
+	"errors"
 )
 
 type User struct {
@@ -84,9 +84,8 @@ func (user User) Insert() (User, error) {
 
 	// Check if the user exists in the DB.
 	if true {
-		return nil, error("a")
+		return user, errors.New("User already exists. Try another one.")
 	}
-
 
 	// Generating the token object.
 	token := Token{}
@@ -124,15 +123,17 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 
 	// Print the items.
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 
 	var response []byte
+
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		response, _ = json.Marshal(map[string] error {
-			"data": err,
+		s := err.Error()
+		response, _ = json.Marshal(map[string] string {
+			"data": s,
 		})
 	} else {
+		w.WriteHeader(http.StatusOK)
 		response, _ = json.Marshal(map[string] User {
 			"data": clean_user,
 		})
