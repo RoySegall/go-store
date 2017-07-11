@@ -8,8 +8,6 @@ import (
 	"github.com/imdario/mergo"
 )
 
-const TABLE = "item"
-
 type Item struct {
 	Id 		string 	`json:"id,omitempty"`
 	Title string 	`json:"title"`
@@ -18,12 +16,12 @@ type Item struct {
 
 // Insert an object.
 func (item Item) Insert() (string) {
-	return api.Insert(TABLE, item)
+	return api.Insert("item", item)
 }
 
 // Get a single object.
 func (item Item) Get(id string) (Item) {
-	res := api.Get(TABLE, id)
+	res := api.Get("item", id)
 	items := []Item{}
 	res.All(&items)
 	return items[0]
@@ -31,7 +29,7 @@ func (item Item) Get(id string) (Item) {
 
 // Get all the items.
 func (item Item) GetAll() ([]Item) {
-	res := api.GetAll(TABLE)
+	res := api.GetAll("item")
 	items := []Item{}
 	res.All(&items)
 	return items
@@ -39,11 +37,11 @@ func (item Item) GetAll() ([]Item) {
 
 // Delete an item.
 func (item Item) Delete() {
-	api.Delete(TABLE, item.Id)
+	api.Delete("item", item.Id)
 }
 
 func (item Item) Update() {
-	api.Update(TABLE, item)
+	api.Update("item", item)
 }
 
 // Get a specific item.
