@@ -3,6 +3,7 @@ package entities
 import (
 	"time"
 	"github.com/dgrijalva/jwt-go"
+	r "gopkg.in/gorethink/gorethink.v3"
 	"io/ioutil"
 	"net/http"
 	"encoding/json"
@@ -13,7 +14,7 @@ import (
 
 type User struct {
 	Id string `gorethink:"id,omitempty"`
-	Username string `json:"title"`
+	Username string `json:"username"`
 	Password string
 	Role Role `json:"role"`
 	Token Token
@@ -83,7 +84,19 @@ func (token Token) Validate() (bool) {
 func (user User) Insert() (User, error) {
 
 	// Check if the user exists in the DB.
-	if true {
+	res, err := r.DB("store").Table("user").Filter(map[string]interface{} {
+		"Username": user.Username,
+	}).Run(api.GetSession())
+
+	if err != nil {
+		s := err.Error()
+		return user, errors.New(s)
+	}
+
+	users := []User{}
+	res.All(&users)
+
+	if len(users) != 0 {
 		return user, errors.New("User already exists. Try another one.")
 	}
 

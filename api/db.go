@@ -8,7 +8,7 @@ type TodoItem struct {
 	Id string
 }
 
-func getSession() (*r.Session) {
+func GetSession() (*r.Session) {
 	session, err := r.Connect(r.ConnectOpts{
 		Address: "localhost",
 		Database: "store",
@@ -23,7 +23,7 @@ func getSession() (*r.Session) {
 
 // Inserting an object to the DB.
 func Insert(table string, arg interface{}) (string) {
-	res, err := r.Table(table).Insert(arg).RunWrite(getSession())
+	res, err := r.Table(table).Insert(arg).RunWrite(GetSession())
 
 	if err != nil {
 		panic(err)
@@ -35,7 +35,7 @@ func Insert(table string, arg interface{}) (string) {
 func Get(table string, id string) (*r.Cursor) {
 	res, err := r.Table(table).Filter(map[string]interface{} {
 		"id": id,
-	}).Run(getSession())
+	}).Run(GetSession())
 
 	if err != nil {
 		panic(err)
@@ -45,7 +45,7 @@ func Get(table string, id string) (*r.Cursor) {
 }
 
 func GetAll(table string) (*r.Cursor) {
-	res, err := r.Table(table).Run(getSession())
+	res, err := r.Table(table).Run(GetSession())
 
 	if err != nil {
 		panic(err)
@@ -55,7 +55,7 @@ func GetAll(table string) (*r.Cursor) {
 }
 
 func Update(table string, object interface{}) (*r.Cursor) {
-	res, err := r.Table(table).Update(object).Run(getSession())
+	res, err := r.Table(table).Update(object).Run(GetSession())
 
 	if err != nil {
 		panic(err)
@@ -67,7 +67,7 @@ func Update(table string, object interface{}) (*r.Cursor) {
 func Delete(table string, id string) (*r.Cursor) {
 	res, err := r.Table(table).Filter(map[string]interface{} {
 		"id": id,
-	}).Delete().Run(getSession())
+	}).Delete().Run(GetSession())
 
 	if err != nil {
 		panic(err)
@@ -78,7 +78,7 @@ func Delete(table string, id string) (*r.Cursor) {
 
 // Create a DB.
 func DbCreate(db string) {
-	err := r.DBCreate(db).Exec(getSession())
+	err := r.DBCreate(db).Exec(GetSession())
 
 	if err != nil {
 		panic(err)
@@ -87,7 +87,7 @@ func DbCreate(db string) {
 
 // Create a table.
 func TableCreate(table string) {
-	err := r.TableCreate(table).Exec(getSession())
+	err := r.TableCreate(table).Exec(GetSession())
 
 	if err != nil {
 		panic(err)
