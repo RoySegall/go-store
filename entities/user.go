@@ -4,15 +4,14 @@ import (
 	"time"
 	"github.com/dgrijalva/jwt-go"
 	"io/ioutil"
-	"fmt"
 )
 
 type User struct {
 	Id string `json:"id,omitempty"`
 	Username string `json:"title"`
-	Password string `json:"price"`
+	Password string
 	Role Role `json:"role"`
-	Token Token
+	Token string
 }
 
 type Token struct {
@@ -25,7 +24,6 @@ type Token struct {
 func generateToken(mode string, user User) (string) {
 	token_template := jwt.MapClaims {
 		"name": user.Username,
-		"pass": user.Password,
 		"mode": mode,
 	}
 
@@ -60,15 +58,19 @@ func (token Token) Validate() (bool) {
 		return false
 	}
 
-	validation_token, err := jwt.Parse(token.Token, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+	parsingResult, err := jwt.Parse(token.Token, func(token *jwt.Token) (interface{}, error) {
+		signKey, err := ioutil.ReadFile("private.key")
+
+		if err != nil {
+			panic(err)
 		}
 
-		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
-		return ok, nil
+		return []byte(signKey), nil
 	})
 
-	return true
+	if err != nil {
+		return false
+	}
+
+	return parsingResult.Valid
 }

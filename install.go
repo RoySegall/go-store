@@ -12,7 +12,7 @@ func main() {
 
 	color.Yellow("Starting to create tables.")
 
-	for _, table := range []string{"item"} {
+	for _, table := range []string{"item", "users"} {
 		api.TableCreate(table)
 		color.Green("The %s table has created.\n", table)
 	}
