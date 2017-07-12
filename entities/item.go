@@ -6,13 +6,20 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/imdario/mergo"
+	"log"
+	"encoding/base64"
+	"io/ioutil"
+	"os"
 )
 
 type Item struct {
-	Id 		string 	`gorethink:"id,omitempty"`
-	Title string 	`gorethink:"title"`
-	Price float64 `gorethink:"price"`
+	Id 		string 	`json,gorethink:"id,omitempty"`
+	Title string 	`json,gorethink:"title"`
+	Price float64 `json,gorethink:"price"`
+	Image string 	`json,gorethink:"image"`
 }
+
+var dir = "/Applications/MAMP/htdocs/go_projects/src/store/images/"
 
 // Insert an object.
 func (item Item) Insert() (string) {
@@ -76,6 +83,40 @@ func ItemPost(w http.ResponseWriter, r *http.Request) {
 	// Processing.
 	item := Item{}
 	json.NewDecoder(r.Body).Decode(&item)
+
+	if item.Title == "" {
+		api.WriteError(w, "The title is required")
+		return
+	}
+
+	if item.Price == 0 {
+		api.WriteError(w, "An item price cannot be 0")
+		return
+	}
+
+	// Before creating the entry in the DB, we need to save the image.
+	if item.Image == "" {
+		api.WriteError(w, "You need to provide an image")
+		return
+	}
+
+	buff, err := base64.StdEncoding.DecodeString(item.Image)
+
+	if err != nil {
+		s := err.Error()
+		log.Print(err)
+		api.WriteError(w, s)
+		return
+	}
+
+	if err := ioutil.WriteFile(dir + "/" + item.Title + ".jpg", buff, 777); err != nil {
+		s := err.Error()
+		log.Print(err)
+		api.WriteError(w, s)
+		return
+	}
+
+	item.Image = item.Title + ".jpg"
 	id := item.Insert()
 
 	// Adding the ID to the object.
@@ -103,8 +144,21 @@ func ItemUpdate(w http.ResponseWriter, r *http.Request) {
 	// Process the new values and attach the ID to the object.
 	item := Item{}
 	json.NewDecoder(r.Body).Decode(&item)
+
+	if item.Title == "" {
+		api.WriteError(w, "The title is required")
+		return
+	}
+
+	if item.Price == 0 {
+		api.WriteError(w, "An item price cannot be 0")
+		return
+	}
+
 	if err := mergo.Merge(&item, old_item); err != nil {
-		panic(err)
+		log.Print(err)
+		api.WriteError(w, "It seems that was an error. Try again later")
+		return
 	}
 
 	// Updating.

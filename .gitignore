@@ -1,2 +1,5 @@
 rethinkdb_data
 .idea/*
+images/*
+private.key
+public.key
