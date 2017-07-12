@@ -10,6 +10,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"store/api"
 	"errors"
+	"log"
+	"fmt"
 )
 
 type User struct {
@@ -24,6 +26,18 @@ type Token struct {
 	Token string `json:"token"`
 	Expire int64 `json:"expire"`
 	RefreshToken string `json:"refresh_token"`
+}
+
+// Display an error easily.
+func WriteError(writer http.ResponseWriter, errorMessage string) {
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusBadRequest)
+
+	response, _ := json.Marshal(map[string] string {
+		"data": errorMessage,
+	})
+
+	writer.Write(response)
 }
 
 // Generating a token.
@@ -89,8 +103,8 @@ func (user User) Insert() (User, error) {
 	}).Run(api.GetSession())
 
 	if err != nil {
-		s := err.Error()
-		return user, errors.New(s)
+		log.Print(err)
+		return user, errors.New("There was an error. Please try again.")
 	}
 
 	users := []User{}
@@ -118,10 +132,20 @@ func (user User) Insert() (User, error) {
 }
 
 // Register end point.
-func UserRegister(w http.ResponseWriter, r *http.Request) {
+func UserRegister(writer http.ResponseWriter, request *http.Request) {
 	// Get a user input.
 	user := User{}
-	json.NewDecoder(r.Body).Decode(&user)
+	json.NewDecoder(request.Body).Decode(&user)
+
+	if user.Username == "" || len(user.Username) < 3 {
+		WriteError(writer, "Username cannot be empty or less than 3 characters")
+		return
+	}
+
+	if user.Password == "" || len(user.Password) < 6 {
+		WriteError(writer, "Password cannot be empty or less than 6 characters")
+		return
+	}
 
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
 
@@ -135,37 +159,70 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 	clean_user, err := clean_user.Insert()
 
 	// Print the items.
-	w.Header().Set("Content-Type", "application/json")
-
-	var response []byte
-
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		s := err.Error()
-		response, _ = json.Marshal(map[string] string {
-			"data": s,
-		})
-	} else {
-		w.WriteHeader(http.StatusOK)
-		response, _ = json.Marshal(map[string] User {
-			"data": clean_user,
-		})
+		WriteError(writer, s)
+		return
 	}
 
-	w.Write(response)
+	response, _ := json.Marshal(map[string] User {
+		"data": clean_user,
+	})
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+	writer.Write(response)
 }
 
 // Login the user.
-func UserLogin(w http.ResponseWriter, r *http.Request) {
+func UserLogin(writer http.ResponseWriter, request *http.Request) {
+	// Get a user input.
+	user := User{}
+	json.NewDecoder(request.Body).Decode(&user)
 
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+
+	// Construct a safe object.
+	clean_user := User {
+		Username: user.Username,
+		Password: string(bytes),
+	}
+
+	res, err := r.DB("store").Table("user").Filter(map[string]interface{} {
+		"Username": clean_user.Username,
+		//"Password": clean_user.Password,
+	}).Run(api.GetSession())
+
+	// Check if the username exists.
+	if err != nil {
+		log.Print(err)
+		WriteError(writer, "The password and the user are wrong. Try again please.")
+		return
+	}
+
+	users := []User{}
+	res.All(&users)
+	fmt.Println(res)
+	fmt.Println(clean_user)
+
+	//users := []User{}
+	//res.All(&users)
+	//
+	//response, _ := json.Marshal(map[string] User {
+	//	"data": users[0],
+	//})
+	//
+	//writer.Header().Set("Content-Type", "application/json")
+	//writer.WriteHeader(http.StatusOK)
+	//writer.Write(response)
 }
 
 // Refreshing an old token.
-func UserTokenRefresh(w http.ResponseWriter, r *http.Request) {
+func UserTokenRefresh(writer http.ResponseWriter, request *http.Request) {
 
 }
 
 // Update user details.
-func UserUpdate(w http.ResponseWriter, r *http.Request) {
+func UserUpdate(writer http.ResponseWriter, request *http.Request) {
 
 }
