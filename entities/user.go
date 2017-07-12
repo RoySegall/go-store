@@ -11,14 +11,13 @@ import (
 	"store/api"
 	"errors"
 	"log"
-	"fmt"
 )
 
 type User struct {
 	Id string `gorethink:"id,omitempty"`
-	Username string `json:"username"`
+	Username string `gorethink:"username"`
 	Password string
-	Role Role `json:"role"`
+	Role Role `gorethink:"role"`
 	Token Token
 }
 
@@ -45,6 +44,7 @@ func generateToken(mode string, user User) (string) {
 	token_template := jwt.MapClaims {
 		"name": user.Username,
 		"mode": mode,
+		"time": int64(time.Now().Unix()) + int64(time.Now().Nanosecond()),
 	}
 
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, token_template)
@@ -131,6 +131,11 @@ func (user User) Insert() (User, error) {
 	return user, nil
 }
 
+// Update the user object.
+func (user User) Update() {
+	api.Update("user", user)
+}
+
 // Register end point.
 func UserRegister(writer http.ResponseWriter, request *http.Request) {
 	// Get a user input.
@@ -177,20 +182,11 @@ func UserRegister(writer http.ResponseWriter, request *http.Request) {
 // Login the user.
 func UserLogin(writer http.ResponseWriter, request *http.Request) {
 	// Get a user input.
-	user := User{}
+	user := &User{}
 	json.NewDecoder(request.Body).Decode(&user)
 
-	bytes, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
-
-	// Construct a safe object.
-	clean_user := User {
-		Username: user.Username,
-		Password: string(bytes),
-	}
-
 	res, err := r.DB("store").Table("user").Filter(map[string]interface{} {
-		"Username": clean_user.Username,
-		//"Password": clean_user.Password,
+		"Username": user.Username,
 	}).Run(api.GetSession())
 
 	// Check if the username exists.
@@ -200,21 +196,32 @@ func UserLogin(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	users := []User{}
-	res.All(&users)
-	fmt.Println(res)
-	fmt.Println(clean_user)
+	// Prepare the result from the DB.
+	DbUsers := []User{}
+	res.All(&DbUsers)
+	matchedUser := DbUsers[0]
 
-	//users := []User{}
-	//res.All(&users)
-	//
-	//response, _ := json.Marshal(map[string] User {
-	//	"data": users[0],
-	//})
-	//
-	//writer.Header().Set("Content-Type", "application/json")
-	//writer.WriteHeader(http.StatusOK)
-	//writer.Write(response)
+	err = bcrypt.CompareHashAndPassword([]byte(matchedUser.Password), []byte(user.Password))
+
+	if err != nil {
+		WriteError(writer, "The password and the user are wrong. Try again please.")
+		return
+	}
+
+	// Create a new token for the user.
+	token := Token{}
+	token.Generate(matchedUser)
+	matchedUser.Token = token
+	matchedUser.Update()
+
+	// Display the user.
+	response, _ := json.Marshal(map[string] User {
+		"data": matchedUser,
+	})
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+	writer.Write(response)
 }
 
 // Refreshing an old token.
