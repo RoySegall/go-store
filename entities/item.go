@@ -108,7 +108,8 @@ func ItemPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := ioutil.WriteFile(dir + "/" + item.Title + ".jpg", buff, 777); err != nil {
+	settings := api.GetSettings()
+	if err := ioutil.WriteFile(settings.ImageDirectory + "/" + item.Title + ".jpg", buff, 777); err != nil {
 		s := err.Error()
 		log.Print(err)
 		api.WriteError(w, s)

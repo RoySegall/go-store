@@ -4,14 +4,11 @@ import (
 	r "gopkg.in/gorethink/gorethink.v3"
 )
 
-type TodoItem struct {
-	Id string
-}
-
 func GetSession() (*r.Session) {
+	settings := GetSettings()
 	session, err := r.Connect(r.ConnectOpts{
-		Address: "localhost",
-		Database: "store",
+		Address: settings.RethinkDB.Address,
+		Database: settings.RethinkDB.Database,
 	})
 
 	if err != nil {

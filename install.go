@@ -6,8 +6,10 @@ import (
 )
 
 func main() {
+	settings := api.GetSettings()
+
 	color.Yellow("Starting to install.")
-	api.DbCreate("store")
+	api.DbCreate(settings.RethinkDB.Database)
 	color.Green("The DB 'store' has created.")
 
 	color.Yellow("Starting to create tables.")

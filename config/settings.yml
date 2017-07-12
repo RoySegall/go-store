@@ -1,0 +1,4 @@
+rethinkdb:
+  address: "localhost"
+  database: "store"
+image_directory: "/Applications/MAMP/htdocs/go_projects/src/store/images/"

@@ -19,6 +19,14 @@ type CRUD struct {
 	Delete 	[]string `yaml:"delete"`
 }
 
+type Settings struct {
+	RethinkDB struct {
+		Address string `yaml:"address"`
+		Database string `yaml:"database"`
+	} `yaml:"rethinkdb"`
+	ImageDirectory string `yaml:"image_directory"`
+}
+
 // Display an error easily.
 func WriteError(writer http.ResponseWriter, errorMessage string) {
 	writer.Header().Set("Content-Type", "application/json")
@@ -53,6 +61,25 @@ func GetPermissions() (Permissions) {
 	}
 
 	var config Permissions
+
+	err = yaml.Unmarshal(yamlFile, &config)
+	if err != nil {
+		panic(err)
+	}
+
+	return config
+}
+
+// Get settings.
+func GetSettings() (Settings) {
+	filename, _ := filepath.Abs("./config/settings.yml")
+	yamlFile, err := ioutil.ReadFile(filename)
+
+	if err != nil {
+		panic(err)
+	}
+
+	var config Settings
 
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
