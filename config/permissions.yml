@@ -1,0 +1,10 @@
+item:
+  create:
+    - "Admin"
+  read:
+    - "Admin"
+    - "Member"
+  update:
+    - "Admin"
+  delete:
+    - "Admin"

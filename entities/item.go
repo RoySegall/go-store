@@ -9,7 +9,6 @@ import (
 	"log"
 	"encoding/base64"
 	"io/ioutil"
-	"os"
 )
 
 type Item struct {
