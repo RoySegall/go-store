@@ -139,3 +139,21 @@ func (user User) Insert() (User, error) {
 func (user User) Update() {
 	api.Update("user", user)
 }
+
+// Adding an item to the user's cart.
+func (user User) AddItemToCart(item Item) {
+	// Append the item to the cart property.
+	_ := append(user.Cart.Items, item)
+
+	// Update the user's in the DB.
+}
+
+// Revoke an item from the cart.
+func (user User) RevokeItemFromCart(item Item) {
+	// Iterate over the items.
+
+	// Remove the item from the cart.
+
+	// Update ht user's cart in the DB.
+
+}

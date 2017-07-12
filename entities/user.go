@@ -6,10 +6,16 @@ type User struct {
 	Password string
 	Role Role `json,gorethink:"role"`
 	Token Token
+	Cart Cart `json,gorethink:"cart"`
+	PastCarts []Cart `json,gorethink:"past_carts"`
 }
 
 type Token struct {
 	Token string `json,gorethink:"token"`
 	Expire int64 `json,gorethink:"expire"`
 	RefreshToken string `json,gorethink:"refresh_token"`
+}
+
+type Cart struct {
+	Items []Item
 }

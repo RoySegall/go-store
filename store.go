@@ -12,17 +12,21 @@ func main() {
 	r := mux.NewRouter()
 
 	// Items.
-	r.HandleFunc("/api/item", entities.ItemsGet).Methods("GET")
-	r.HandleFunc("/api/item", entities.ItemPost).Methods("POST")
-	r.HandleFunc("/api/item/{id}", entities.ItemGet).Methods("GET")
-	r.HandleFunc("/api/item/{id}", entities.ItemUpdate).Methods("PATCH")
-	r.HandleFunc("/api/item/{id}", entities.ItemDelete).Methods("DELETE")
+	r.HandleFunc("/api/item", entities.ItemsGet).Methods(http.MethodGet)
+	r.HandleFunc("/api/item", entities.ItemPost).Methods(http.MethodPost)
+	r.HandleFunc("/api/item/{id}", entities.ItemGet).Methods(http.MethodGet)
+	r.HandleFunc("/api/item/{id}", entities.ItemUpdate).Methods(http.MethodPatch)
+	r.HandleFunc("/api/item/{id}", entities.ItemDelete).Methods(http.MethodDelete)
 
 	// User.
-	r.HandleFunc("/api/user", entities.UserInfo).Methods("GET")
-	r.HandleFunc("/api/user", entities.UserRegister).Methods("POST")
-	r.HandleFunc("/api/user/login", entities.UserLogin).Methods("POST")
-	r.HandleFunc("/api/user/token_refresh", entities.UserTokenRefresh).Methods("POST")
+	r.HandleFunc("/api/user", entities.UserInfo).Methods(http.MethodPost)
+	r.HandleFunc("/api/user", entities.UserRegister).Methods(http.MethodPost)
+	r.HandleFunc("/api/user/login", entities.UserLogin).Methods(http.MethodPost)
+	r.HandleFunc("/api/user/token_refresh", entities.UserTokenRefresh).Methods(http.MethodPost)
+
+	// Cart management.
+	r.HandleFunc("/api/cart", entities.UserAddItemToCart).Methods(http.MethodPost)
+	r.HandleFunc("/api/cart", entities.UserRevokeItemFromCart).Methods(http.MethodDelete)
 
 	color.Green("Server started...")
 

@@ -169,3 +169,13 @@ func UserInfo(writer http.ResponseWriter, request *http.Request) {
 	writer.WriteHeader(http.StatusOK)
 	writer.Write(response)
 }
+
+// Adding an item to the user cart.
+func UserAddItemToCart(write http.ResponseWriter, request *http.Request) {
+
+}
+
+// Removing an item from the cart.
+func UserRevokeItemFromCart(write http.ResponseWriter, request *http.Request) {
+
+}
