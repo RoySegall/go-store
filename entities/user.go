@@ -14,17 +14,17 @@ import (
 )
 
 type User struct {
-	Id string `gorethink:"id,omitempty"`
-	Username string `gorethink:"username"`
+	Id string `json,gorethink:"id,omitempty"`
+	Username string `json,gorethink:"username"`
 	Password string
-	Role Role `gorethink:"role"`
+	Role Role `json,gorethink:"role"`
 	Token Token
 }
 
 type Token struct {
-	Token string `gorethink:"token"`
-	Expire int64 `gorethink:"expire"`
-	RefreshToken string `gorethink:"refresh_token"`
+	Token string `json,gorethink:"token"`
+	Expire int64 `json,gorethink:"expire"`
+	RefreshToken string `json,gorethink:"refresh_token"`
 }
 
 // Generating a token.
@@ -56,6 +56,38 @@ func (token *Token) Generate(user User) () {
 	token.Token = generateToken("main_token", user)
 	token.Expire = time.Now().Add(time.Hour * 24).Unix()
 	token.RefreshToken = generateToken("refresh_token", user)
+}
+
+// Load a user from the DB with a token.
+func LoadUserFromDB(token string) (User, error) {
+
+	user := User{}
+
+	// Query from the DB.
+	res, err := r.DB("store").Table("user").Filter(map[string]interface{} {
+		"Token": map[string]interface{} {
+			"Token": token,
+		},
+	}).Run(api.GetSession())
+
+	if err != nil {
+		s := err.Error()
+		log.Print(s)
+		return user, errors.New("There was an error.")
+	}
+
+	users := []User{}
+	res.All(&users)
+
+	if len(users) == 0 {
+		return user, errors.New("There is no user a matching access token.")
+	}
+
+	if !users[0].Token.Validate() {
+		return user, errors.New("The token is not valid. Might be expired.")
+	}
+
+	return users[0], nil
 }
 
 // Checking if the token is valid or not.
@@ -264,7 +296,24 @@ func UserTokenRefresh(writer http.ResponseWriter, request *http.Request) {
 	writer.Write(response)
 }
 
-// Update user details.
-func UserUpdate(writer http.ResponseWriter, request *http.Request) {
+// Get user details.
+func UserInfo(writer http.ResponseWriter, request *http.Request) {
+	token := request.Header.Get("access-token")
+	user, err := LoadUserFromDB(token)
 
+	if err != nil {
+		s := err.Error()
+		api.WriteError(writer, s)
+		return
+	}
+
+	// Display the user.
+	response, _ := json.Marshal(map[string] User {
+		"data": user,
+	})
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+	writer.Write(response)
 }
+
