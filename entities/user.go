@@ -17,5 +17,5 @@ type Token struct {
 }
 
 type Cart struct {
-	Items []Item
+	Items []Item `json,gorethink:"items"`
 }

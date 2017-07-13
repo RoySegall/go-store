@@ -140,16 +140,36 @@ func (user User) Update() {
 	api.Update("user", user)
 }
 
-// Adding an item to the user's cart.
-func (user User) AddItemToCart(item Item) {
-	// Append the item to the cart property.
-	_ := append(user.Cart.Items, item)
+// Load user from DB.
+func (user User) Get(id string) (User, error) {
+	// Check if the user exists in the DB.
+	res, err := r.DB("store").Table("user").Filter(map[string]interface{} {
+		"id": id,
+	}).Run(api.GetSession())
 
-	// Update the user's in the DB.
+	if err != nil {
+		log.Print(err)
+		return user, errors.New("There was an error. Please try again.")
+	}
+
+	users := []User{}
+	res.All(&users)
+
+	if len(users) != 0 {
+		return user, errors.New("User already exists. Try another one.")
+	}
+
+	return users[0], nil
+}
+
+// Adding an item to the user's cart.
+func (user *User) AddItemToCart(item Item) {
+	// Append the item to the cart property.
+	user.Cart.Items = append(user.Cart.Items, item)
 }
 
 // Revoke an item from the cart.
-func (user User) RevokeItemFromCart(item Item) {
+func (user *User) RevokeItemFromCart(item Item) {
 	// Iterate over the items.
 
 	// Remove the item from the cart.
