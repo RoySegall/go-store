@@ -25,7 +25,8 @@ func main() {
 	r.HandleFunc("/api/user/token_refresh", entities.UserTokenRefresh).Methods(http.MethodPost)
 
 	// Cart management.
-	r.HandleFunc("/api/cart", entities.UserAddItemToCart).Methods(http.MethodPost)
+	r.HandleFunc("/api/cart/items", entities.UserAddItemToCart).Methods(http.MethodPost)
+	r.HandleFunc("/api/cart/items", entities.UserRevokeItemFromCart).Methods(http.MethodDelete)
 	r.HandleFunc("/api/cart", entities.UserRevokeItemFromCart).Methods(http.MethodDelete)
 
 	color.Green("Server started...")
