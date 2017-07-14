@@ -19,3 +19,7 @@ type Token struct {
 type Cart struct {
 	Items []Item `json,gorethink:"items"`
 }
+
+type PostItem struct {
+	ItemId string `json,gorethink:"item_id"`
+}

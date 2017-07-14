@@ -29,13 +29,23 @@ type Settings struct {
 
 // Display an error easily.
 func WriteError(writer http.ResponseWriter, errorMessage string) {
-	writer.Header().Set("Content-Type", "application/json")
-	writer.WriteHeader(http.StatusBadRequest)
-
 	response, _ := json.Marshal(map[string] string {
 		"data": errorMessage,
 	})
 
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusBadRequest)
+	writer.Write(response)
+}
+
+// Display a message.
+func WriteOk(writer http.ResponseWriter, okMessage string) {
+	response, _ := json.Marshal(map[string] string {
+		"data": okMessage,
+	})
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
 	writer.Write(response)
 }
 

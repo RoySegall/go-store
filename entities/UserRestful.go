@@ -171,16 +171,87 @@ func UserInfo(writer http.ResponseWriter, request *http.Request) {
 }
 
 // Adding an item to the user cart.
-func UserAddItemToCart(write http.ResponseWriter, request *http.Request) {
+func UserAddItemToCart(writer http.ResponseWriter, request *http.Request) {
 
+	token := request.Header.Get("access-token")
+	user, err := LoadUserFromDB(token)
+
+	if err != nil {
+		s := err.Error()
+		api.WriteError(writer, s)
+		return
+	}
+
+	// Get a user input.
+	post_item := &PostItem{}
+	json.NewDecoder(request.Body).Decode(&post_item)
+
+	if post_item.ItemId == "" {
+		api.WriteError(writer, "Item cannot be empty!")
+		return
+	}
+
+	item := Item{}.Get(post_item.ItemId)
+
+	if item.Id == "" {
+		api.WriteError(writer, "There is no item with the ID " + post_item.ItemId)
+		return
+	}
+
+	user.AddItemToCart(item)
+	user.Update()
+	api.WriteOk(writer, "The item " + item.Title + " Was added to the cart.")
 }
 
 // Removing an item from the cart.
-func UserRevokeItemFromCart(write http.ResponseWriter, request *http.Request) {
+func UserRevokeItemFromCart(writer http.ResponseWriter, request *http.Request) {
+	token := request.Header.Get("access-token")
+	user, err := LoadUserFromDB(token)
 
+	if err != nil {
+		s := err.Error()
+		api.WriteError(writer, s)
+		return
+	}
+
+	// Get a user input.
+	post_item := &PostItem{}
+	json.NewDecoder(request.Body).Decode(&post_item)
+
+	if post_item.ItemId == "" {
+		api.WriteError(writer, "Item cannot be empty!")
+		return
+	}
+
+	item := Item{}.Get(post_item.ItemId)
+
+	if item.Id == "" {
+		api.WriteError(writer, "There is no item with the ID " + post_item.ItemId)
+		return
+	}
+
+	user.RevokeItemFromCart(post_item.ItemId)
+	user.Update()
+	api.WriteOk(writer, "The item " + item.Title + " revoked from the the cart.")
 }
 
 // After the user finished with the cart, archive it.
-func UserArchiveCart(write http.ResponseWriter, request *http.Request) {
+func UserArchiveCart(writer http.ResponseWriter, request *http.Request) {
+	token := request.Header.Get("access-token")
+	user, err := LoadUserFromDB(token)
 
+	if err != nil {
+		s := err.Error()
+		api.WriteError(writer, s)
+		return
+	}
+
+	if len(user.Cart.Items) == 0 {
+		api.WriteError(writer, "There are no items in the current cart.")
+		return
+	}
+
+	user.ArchiveCart()
+	user.Update()
+	api.WriteOk(writer, "The cart moved to the archive.")
 }

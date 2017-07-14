@@ -12,6 +12,11 @@ func (item Item) Get(id string) (Item) {
 	res := api.Get("item", id)
 	items := []Item{}
 	res.All(&items)
+
+	if len(items) == 0 {
+		return item
+	}
+
 	return items[0]
 }
 
@@ -20,6 +25,11 @@ func (item Item) GetAll() ([]Item) {
 	res := api.GetAll("item")
 	items := []Item{}
 	res.All(&items)
+
+	if len(items) == 0 {
+		return items
+	}
+
 	return items
 }
 
