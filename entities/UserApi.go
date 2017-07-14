@@ -155,8 +155,8 @@ func (user User) Get(id string) (User, error) {
 	users := []User{}
 	res.All(&users)
 
-	if len(users) != 0 {
-		return user, errors.New("User already exists. Try another one.")
+	if len(users) == 0 {
+		return user, errors.New("User does not exists. Try another one.")
 	}
 
 	return users[0], nil
@@ -169,11 +169,18 @@ func (user *User) AddItemToCart(item Item) {
 }
 
 // Revoke an item from the cart.
-func (user *User) RevokeItemFromCart(item Item) {
-	// Iterate over the items.
+func (user *User) RevokeItemFromCart(itemId string) {
 
-	// Remove the item from the cart.
+	var items []Item
 
-	// Update ht user's cart in the DB.
+	for _, item := range user.Cart.Items {
 
+		if item.Id == itemId {
+			continue
+		}
+
+		items = append(items, item)
+	}
+
+	user.Cart.Items = items
 }
