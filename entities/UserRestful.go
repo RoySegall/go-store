@@ -179,3 +179,8 @@ func UserAddItemToCart(write http.ResponseWriter, request *http.Request) {
 func UserRevokeItemFromCart(write http.ResponseWriter, request *http.Request) {
 
 }
+
+// After the user finished with the cart, archive it.
+func UserArchiveCart(write http.ResponseWriter, request *http.Request) {
+
+}
