@@ -25,6 +25,7 @@ type Settings struct {
 		Database string `yaml:"database"`
 	} `yaml:"rethinkdb"`
 	ImageDirectory string `yaml:"image_directory"`
+	Port string `yaml:"port"`
 }
 
 // Display an error easily.
