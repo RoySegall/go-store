@@ -13,7 +13,7 @@ func main() {
 	r := mux.NewRouter()
 
 	// Items.
-	r.HandleFunc("/api/item", entities.ItemsGet).Methods(http.MethodGet)
+	r.HandleFunc("/api/items", entities.ItemsGet).Methods(http.MethodGet)
 	r.HandleFunc("/api/item", entities.ItemPost).Methods(http.MethodPost)
 	r.HandleFunc("/api/item/{id}", entities.ItemGet).Methods(http.MethodGet)
 	r.HandleFunc("/api/item/{id}", entities.ItemUpdate).Methods(http.MethodPatch)
