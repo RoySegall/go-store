@@ -20,4 +20,6 @@ func main() {
 	}
 
 	color.GreenString("Done!")
+
+	// Check if we need to migrate or not.
 }
