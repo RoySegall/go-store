@@ -82,9 +82,27 @@ func DbCreate(db string) {
 	}
 }
 
+// Checking if a DB exists.
+func DbDrop(db string) {
+	err := r.DBDrop(db).Exec(GetSession())
+
+	if err != nil {
+		panic(err)
+	}
+}
+
 // Create a table.
 func TableCreate(table string) {
 	err := r.TableCreate(table).Exec(GetSession())
+
+	if err != nil {
+		panic(err)
+	}
+}
+
+// Dropping a table
+func TableDrop(table string) {
+	err := r.TableDrop(table).Exec(GetSession())
 
 	if err != nil {
 		panic(err)
