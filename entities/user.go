@@ -4,6 +4,8 @@ type User struct {
 	Id string `json,gorethink:"id,omitempty"`
 	Username string `json,gorethink:"username"`
 	Password string
+	Email string `yml:"email"`
+	Image string `yml:"Image"`
 	Role Role `json,gorethink:"role"`
 	Token Token
 	Cart Cart `json,gorethink:"cart"`

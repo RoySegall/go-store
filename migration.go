@@ -6,22 +6,16 @@ import (
 	"fmt"
 	"strings"
 	"store/api"
+	"path/filepath"
+	"io/ioutil"
+	"gopkg.in/yaml.v2"
+	"store/entities"
+	"log"
 )
 
 func main() {
 
-	if !askQuestion("Do you want to start? This will erase any content!") {
-		fmt.Println("Quitting.")
-		return
-	}
-
-	if askQuestion("Migrate users?") {
-		userMigrate()
-	}
-
-	if askQuestion("Migrate items") {
-		itemsMigrate()
-	}
+	userMigrate()
 }
 
 // Asking a question.
@@ -47,6 +41,24 @@ func askQuestion(question string) bool {
 
 func userMigrate() {
 	fmt.Println("migratin users")
+
+	filename, _ := filepath.Abs("./migration/users.yml")
+	yamlFile, err := ioutil.ReadFile(filename)
+
+	if err != nil {
+		panic(err)
+	}
+
+	m := make(map[string]entities.User)
+
+	err = yaml.Unmarshal(yamlFile, &m)
+	if err != nil {
+		log.Fatalf("error: %v", err)
+	}
+
+	for _, value := range m {
+		fmt.Println(value)
+	}
 }
 
 func itemsMigrate() {
