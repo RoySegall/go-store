@@ -11,6 +11,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"store/entities"
 	"log"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func main() {
@@ -40,6 +41,11 @@ func askQuestion(question string) bool {
 }
 
 func userMigrate() {
+	fmt.Println("Drop users table")
+	api.TableDrop("user")
+	fmt.Println("Create users table")
+	api.TableCreate("user")
+
 	fmt.Println("migratin users")
 
 	filename, _ := filepath.Abs("./migration/users.yml")
@@ -56,8 +62,28 @@ func userMigrate() {
 		log.Fatalf("error: %v", err)
 	}
 
-	for _, value := range m {
-		fmt.Println(value)
+	for _, user := range m {
+		// Alter the user password.
+		bytes, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+		user.Password = string(bytes)
+
+		// Migrate the image.
+		//dest_image_path, _ := filepath.Abs(api.GetSettings().ImageDirectory)
+		//source_image_path, _ := filepath.Abs("./migration/images/")
+
+		if err != nil {
+			panic(err)
+		}
+
+		user.Image = api.GetSettings().ImageDirectory + "users/" + user.Image
+
+		object, err := user.Insert()
+
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println("Migrating " + object.Username)
 	}
 }
 

@@ -1,7 +1,7 @@
 package entities
 
 type User struct {
-	Id string `json,gorethink:"id,omitempty"`
+	Id string `json,gorethink:"id"`
 	Username string `json,gorethink:"username"`
 	Password string
 	Email string `yml:"email"`
