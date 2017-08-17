@@ -12,10 +12,10 @@ import (
 	"store/entities"
 	"log"
 	"golang.org/x/crypto/bcrypt"
+	"io"
 )
 
 func main() {
-
 	userMigrate()
 }
 
@@ -68,8 +68,7 @@ func userMigrate() {
 		user.Password = string(bytes)
 
 		// Migrate the image.
-		//dest_image_path, _ := filepath.Abs(api.GetSettings().ImageDirectory)
-		//source_image_path, _ := filepath.Abs("./migration/images/")
+		err := fileCopy("migration/images/users/" + user.Image, api.GetSettings().ImageDirectory + "/" + user.Image)
 
 		if err != nil {
 			panic(err)
@@ -89,4 +88,25 @@ func userMigrate() {
 
 func itemsMigrate() {
 	fmt.Println("migratin items")
+}
+
+// Copy file.
+func fileCopy(src, dst string) error {
+	s, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+
+	// no need to check errors on read only file, we already got everything
+	// we need from the filesystem, so nothing can go wrong now.
+	defer s.Close()
+	d, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	if _, err := io.Copy(d, s); err != nil {
+		d.Close()
+		return err
+	}
+	return d.Close()
 }
