@@ -16,7 +16,8 @@ import (
 )
 
 func main() {
-	userMigrate()
+	//userMigrate()
+	itemsMigrate()
 }
 
 // Asking a question.
@@ -41,8 +42,10 @@ func askQuestion(question string) bool {
 }
 
 func userMigrate() {
+
 	fmt.Println("Drop users table")
 	api.TableDrop("user")
+
 	fmt.Println("Create users table")
 	api.TableCreate("user")
 
@@ -68,7 +71,9 @@ func userMigrate() {
 		user.Password = string(bytes)
 
 		// Migrate the image.
-		err := fileCopy("migration/images/users/" + user.Image, api.GetSettings().ImageDirectory + "/" + user.Image)
+		err := fileCopy(
+			"migration/images/users/" + user.Image,
+			api.GetSettings().ImageDirectory + "/" + user.Image)
 
 		if err != nil {
 			panic(err)
@@ -84,6 +89,8 @@ func userMigrate() {
 
 		fmt.Println("Migrating " + object.Username)
 	}
+
+	fmt.Println("All the users have been migrated. Awesome!")
 }
 
 func itemsMigrate() {
@@ -92,7 +99,16 @@ func itemsMigrate() {
 
 // Copy file.
 func fileCopy(src, dst string) error {
+
+	data, _ := os.Stat(dst)
+
+	if data != nil {
+		// Delete a file which already exists.
+		os.Remove(dst)
+	}
+
 	s, err := os.Open(src)
+
 	if err != nil {
 		return err
 	}
@@ -100,13 +116,17 @@ func fileCopy(src, dst string) error {
 	// no need to check errors on read only file, we already got everything
 	// we need from the filesystem, so nothing can go wrong now.
 	defer s.Close()
+
 	d, err := os.Create(dst)
+
 	if err != nil {
 		return err
 	}
+
 	if _, err := io.Copy(d, s); err != nil {
 		d.Close()
 		return err
 	}
+
 	return d.Close()
 }
