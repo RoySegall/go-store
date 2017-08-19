@@ -9,25 +9,20 @@ import (
 	"io/ioutil"
 	"github.com/imdario/mergo"
 	"encoding/base64"
+	"github.com/labstack/echo"
 )
 
 // Get a specific item.
-func ItemsGet(w http.ResponseWriter, r *http.Request) {
+func ItemsGet(c echo.Context) error {
 
 	// Print out the
-	response, _ := json.Marshal(map[string] []Item {
+	return c.JSON(200, map[string] []Item {
 		"data": Item{}.GetAll(),
 	})
-
-	// Print the items.
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.WriteHeader(http.StatusOK)
-	w.Write(response)
 }
 
 // Get a specific item.
-func ItemGet(w http.ResponseWriter, r *http.Request) {
+func ItemGet(c echo.Context) error {
 	// Pull a single item from the DB.
 	vars := mux.Vars(r)
 	response, _ := json.Marshal(map[string] Item {
@@ -40,7 +35,7 @@ func ItemGet(w http.ResponseWriter, r *http.Request) {
 	w.Write(response)
 }
 
-func ItemPost(w http.ResponseWriter, r *http.Request) {
+func ItemPost(c echo.Context) error {
 	// Processing.
 	item := Item{}
 	json.NewDecoder(r.Body).Decode(&item)
@@ -96,7 +91,7 @@ func ItemPost(w http.ResponseWriter, r *http.Request) {
 }
 
 // Update an item.
-func ItemUpdate(w http.ResponseWriter, r *http.Request) {
+func ItemUpdate(c echo.Context) error {
 	// Process variables.
 	vars := mux.Vars(r)
 
@@ -138,7 +133,7 @@ func ItemUpdate(w http.ResponseWriter, r *http.Request) {
 }
 
 // Delete an item.
-func ItemDelete(w http.ResponseWriter, r *http.Request) {
+func ItemDelete(c echo.Context) error {
 	// Process variables.
 	vars := mux.Vars(r)
 
