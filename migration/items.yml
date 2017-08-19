@@ -149,72 +149,67 @@ book32:
   price: 24.50
   image: "book32.jpg"
 book33:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Hype driven development"
+  description: "Looking for love in all the wrong frameworks"
   price: 24.50
   image: "book33.jpg"
 book34:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Copying and pasting from Stack Overflow"
+  description: "Cutting corners to meet arbitrary management deadlines"
   price: 24.50
   image: "book34.jpg"
 book35:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Googling the error message"
+  description: "The internet will make those bad words go away"
   price: 24.50
   image: "book35.jpg"
 book36:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Rewriting you front end every six weeks"
+  description: "This time you have definitely the right libraris to build tools"
   price: 24.50
   image: "book36.jpg"
 book37:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Half-listening to conference talks"
+  description: "Paying 1,500 to browse Twitter and hang out on Slack"
   price: 24.50
   image: "book37.jpg"
-book38:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
-  price: 24.50
-  image: "book38.jpg"
 book39:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Memorizing Six git commands"
+  description: "The popular approach to version control"
   price: 24.50
   image: "book39.jpg"
 book40:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Hoping this works"
+  description: "Solutions that might fix the problem without breaking anything"
   price: 24.50
   image: "book40.jpg"
 book41:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Ignoring the deprecation warning"
+  description: "Maybe the'll just go away on their own"
   price: 24.50
   image: "book41.jpg"
 book42:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Commenting out failed tests"
+  description: "Nuisance-free software development"
   price: 24.50
   image: "book42.jpg"
 book43:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: '"Temporary" workarounds'
+  description: "Who are you kidding?"
   price: 24.50
   image: "book43.jpg"
 book44:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Whiteboard interviews"
+  description: "Putting the candidate through the same bullshit you went through"
   price: 24.50
   image: "book44.jpg"
 book45:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Operations, how th fuck did this ever work"
+  description: "I dunno, It works on my machine. Ship it."
   price: 24.50
   image: "book45.png"
 book46:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Trying stuff until it works"
+  description: "Software can be chaotic, but we make it work"
   price: 24.50
   image: "book46.png"
