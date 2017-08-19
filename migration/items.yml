@@ -64,98 +64,88 @@ book13:
   price: 24.50
   image: "book13.jpg"
 book14:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "'); DROP TABLE animals;--"
+  description: "Now with user-generated content!"
   price: 24.50
   image: "book14.jpg"
 book15:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Vague understanding of computer science"
+  description: "Probably be able explain a sorting algorithm if it ever comes up"
   price: 24.50
   image: "book15.jpg"
 book16:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Shiny new things"
+  description: "Embracing the irrefutable correlation between monthly and quality"
   price: 24.50
   image: "book16.jpg"
 book17:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Fiddling with the padding"
+  description: "Trying not to thing abut the economic value of this activity"
   price: 24.50
   image: "book17.jpg"
 book18:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Regex by trial and error"
+  description: "Combining slashes and dot until a thing happen"
   price: 24.50
   image: "book18.jpg"
 book19:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Blaming the architecture"
+  description: "Fundamentals of establishing a scapegoat"
   price: 24.50
   image: "book19.jpg"
 book20:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "It depends"
+  description: "The answer to every programming question ever conceived"
   price: 24.50
   image: "book20.jpg"
 book21:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Hating other people's code"
+  description: "It's only a clear hack if you're the one who wrote it"
   price: 24.50
   image: "book21.jpg"
 book22:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Useless code quality metrics"
+  description: "Blindly adhering the arbitrary standards"
   price: 24.50
   image: "book22.jpg"
 book23:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Trivial details"
+  description: "Perfecting the parts that don't matter"
   price: 24.50
   image: "book23.jpg"
 book24:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Pretending to know about stuff"
+  description: "Feigning knowledge of a word you've heard a few times"
   price: 24.50
   image: "book24.jpg"
 book25:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "The art of the cyber"
+  description: "Great cyber, the best cyber, yuuuuge cyber"
   price: 24.50
   image: "book25.jpg"
-book26:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
-  price: 24.50
-  image: "book26.jpg"
 book27:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Executes to miss meetings"
+  description: "Timing critical takes to coincide with morning stand-up"
   price: 24.50
   image: "book27.jpg"
 book28:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Getting it to work"
+  description: "Achievement despite ignorance"
   price: 24.50
   image: "book28.jpg"
-book29:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
-  price: 24.50
-  image: "book29.jpg"
 book30:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Crushing it"
+  description: "Up-and-to-the-right driven development"
   price: 24.50
   image: "book30.jpg"
 book31:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Rolling you own CMS, For No Good Reason"
+  description: "Recreating Wordpress in some other programming language"
   price: 24.50
   image: "book31.jpg"
 book32:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Solving imaginary scaling issues, At scale"
+  description: "Getting the wrong idea that conference talk you attended"
   price: 24.50
   image: "book32.jpg"
 book33:
