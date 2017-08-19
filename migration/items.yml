@@ -4,63 +4,63 @@ book01:
   price: 24.50
   image: "book01.png"
 book02:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Hoping for the right interview questions"
+  description: "Banking on the 10& you know form Googling"
   price: 24.50
   image: "book02.jpg"
 book03:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Pasting code from some random 2012 Node.js Tutorial"
+  description: "It was the first google result and you only live once"
   price: 24.50
   image: "book03.jpg"
 book04:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Getting around to security next month"
+  description: "Putting of critical until everyone forget about them"
   price: 24.50
   image: "book04.jpg"
 book05:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Essential Nodding along"
+  description: "Pretending to understand concepts an acronyms"
   price: 24.50
   image: "book05.jpg"
 book06:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Googling for the regex"
+  description: "The internet will do the remembering for you"
   price: 24.50
   image: "book06.jpg"
 book07:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Breaking the back button"
+  description: "Running something the browser gave you for free"
   price: 24.50
   image: "book07.jpg"
 book08:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Getting an arduino LED to blink"
+  description: "Looks like it's back to pixels for you!"
   price: 24.50
   image: "book08.jpg"
 book09:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Choosing based on GitHib stars"
+  description: "Depending on a wave popularity contest"
   price: 24.50
   image: "book09.jpg"
 book10:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Hooping nobody hacks you"
+  description: "Security by optimism and prayer"
   price: 24.50
   image: "book10.jpg"
 book11:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Thanklessly maintaining open source software"
+  description: "Acting out of the goodness of your heart, or something"
   price: 24.50
   image: "book11.jpg"
 book12:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Resolving broken dependencies"
+  description: "What did I do to deserve this?"
   price: 24.50
   image: "book12.jpg"
 book13:
-  title: "Blame the other guy"
-  description: "Cz you never do anything wrong"
+  title: "Overcorrecting for pat failures"
+  description: "Working emotional volatility into your decision tree"
   price: 24.50
   image: "book13.jpg"
 book14:
