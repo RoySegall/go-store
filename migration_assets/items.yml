@@ -1,0 +1,215 @@
+book01:
+  title: "Blame the other guy"
+  description: "Cz you never do anything wrong"
+  price: 24.50
+  image: "book01.png"
+book02:
+  title: "Hoping for the right interview questions"
+  description: "Banking on the 10& you know form Googling"
+  price: 24.50
+  image: "book02.jpg"
+book03:
+  title: "Pasting code from some random 2012 Node.js Tutorial"
+  description: "It was the first google result and you only live once"
+  price: 24.50
+  image: "book03.jpg"
+book04:
+  title: "Getting around to security next month"
+  description: "Putting of critical until everyone forget about them"
+  price: 24.50
+  image: "book04.jpg"
+book05:
+  title: "Essential Nodding along"
+  description: "Pretending to understand concepts an acronyms"
+  price: 24.50
+  image: "book05.jpg"
+book06:
+  title: "Googling for the regex"
+  description: "The internet will do the remembering for you"
+  price: 24.50
+  image: "book06.jpg"
+book07:
+  title: "Breaking the back button"
+  description: "Running something the browser gave you for free"
+  price: 24.50
+  image: "book07.jpg"
+book08:
+  title: "Getting an arduino LED to blink"
+  description: "Looks like it's back to pixels for you!"
+  price: 24.50
+  image: "book08.jpg"
+book09:
+  title: "Choosing based on GitHib stars"
+  description: "Depending on a wave popularity contest"
+  price: 24.50
+  image: "book09.jpg"
+book10:
+  title: "Hooping nobody hacks you"
+  description: "Security by optimism and prayer"
+  price: 24.50
+  image: "book10.jpg"
+book11:
+  title: "Thanklessly maintaining open source software"
+  description: "Acting out of the goodness of your heart, or something"
+  price: 24.50
+  image: "book11.jpg"
+book12:
+  title: "Resolving broken dependencies"
+  description: "What did I do to deserve this?"
+  price: 24.50
+  image: "book12.jpg"
+book13:
+  title: "Overcorrecting for pat failures"
+  description: "Working emotional volatility into your decision tree"
+  price: 24.50
+  image: "book13.jpg"
+book14:
+  title: "'); DROP TABLE animals;--"
+  description: "Now with user-generated content!"
+  price: 24.50
+  image: "book14.jpg"
+book15:
+  title: "Vague understanding of computer science"
+  description: "Probably be able explain a sorting algorithm if it ever comes up"
+  price: 24.50
+  image: "book15.jpg"
+book16:
+  title: "Shiny new things"
+  description: "Embracing the irrefutable correlation between monthly and quality"
+  price: 24.50
+  image: "book16.jpg"
+book17:
+  title: "Fiddling with the padding"
+  description: "Trying not to thing abut the economic value of this activity"
+  price: 24.50
+  image: "book17.jpg"
+book18:
+  title: "Regex by trial and error"
+  description: "Combining slashes and dot until a thing happen"
+  price: 24.50
+  image: "book18.jpg"
+book19:
+  title: "Blaming the architecture"
+  description: "Fundamentals of establishing a scapegoat"
+  price: 24.50
+  image: "book19.jpg"
+book20:
+  title: "It depends"
+  description: "The answer to every programming question ever conceived"
+  price: 24.50
+  image: "book20.jpg"
+book21:
+  title: "Hating other people's code"
+  description: "It's only a clear hack if you're the one who wrote it"
+  price: 24.50
+  image: "book21.jpg"
+book22:
+  title: "Useless code quality metrics"
+  description: "Blindly adhering the arbitrary standards"
+  price: 24.50
+  image: "book22.jpg"
+book23:
+  title: "Trivial details"
+  description: "Perfecting the parts that don't matter"
+  price: 24.50
+  image: "book23.jpg"
+book24:
+  title: "Pretending to know about stuff"
+  description: "Feigning knowledge of a word you've heard a few times"
+  price: 24.50
+  image: "book24.jpg"
+book25:
+  title: "The art of the cyber"
+  description: "Great cyber, the best cyber, yuuuuge cyber"
+  price: 24.50
+  image: "book25.jpg"
+book27:
+  title: "Executes to miss meetings"
+  description: "Timing critical takes to coincide with morning stand-up"
+  price: 24.50
+  image: "book27.jpg"
+book28:
+  title: "Getting it to work"
+  description: "Achievement despite ignorance"
+  price: 24.50
+  image: "book28.jpg"
+book30:
+  title: "Crushing it"
+  description: "Up-and-to-the-right driven development"
+  price: 24.50
+  image: "book30.jpg"
+book31:
+  title: "Rolling you own CMS, For No Good Reason"
+  description: "Recreating Wordpress in some other programming language"
+  price: 24.50
+  image: "book31.jpg"
+book32:
+  title: "Solving imaginary scaling issues, At scale"
+  description: "Getting the wrong idea that conference talk you attended"
+  price: 24.50
+  image: "book32.jpg"
+book33:
+  title: "Hype driven development"
+  description: "Looking for love in all the wrong frameworks"
+  price: 24.50
+  image: "book33.jpg"
+book34:
+  title: "Copying and pasting from Stack Overflow"
+  description: "Cutting corners to meet arbitrary management deadlines"
+  price: 24.50
+  image: "book34.jpg"
+book35:
+  title: "Googling the error message"
+  description: "The internet will make those bad words go away"
+  price: 24.50
+  image: "book35.jpg"
+book36:
+  title: "Rewriting you front end every six weeks"
+  description: "This time you have definitely the right libraris to build tools"
+  price: 24.50
+  image: "book36.jpg"
+book37:
+  title: "Half-listening to conference talks"
+  description: "Paying 1,500 to browse Twitter and hang out on Slack"
+  price: 24.50
+  image: "book37.jpg"
+book39:
+  title: "Memorizing Six git commands"
+  description: "The popular approach to version control"
+  price: 24.50
+  image: "book39.jpg"
+book40:
+  title: "Hoping this works"
+  description: "Solutions that might fix the problem without breaking anything"
+  price: 24.50
+  image: "book40.jpg"
+book41:
+  title: "Ignoring the deprecation warning"
+  description: "Maybe the'll just go away on their own"
+  price: 24.50
+  image: "book41.jpg"
+book42:
+  title: "Commenting out failed tests"
+  description: "Nuisance-free software development"
+  price: 24.50
+  image: "book42.jpg"
+book43:
+  title: '"Temporary" workarounds'
+  description: "Who are you kidding?"
+  price: 24.50
+  image: "book43.jpg"
+book44:
+  title: "Whiteboard interviews"
+  description: "Putting the candidate through the same bullshit you went through"
+  price: 24.50
+  image: "book44.png"
+book45:
+  title: "Operations, how th fuck did this ever work"
+  description: "I dunno, It works on my machine. Ship it."
+  price: 24.50
+  image: "book45.jpg"
+book46:
+  title: "Trying stuff until it works"
+  description: "Software can be chaotic, but we make it work"
+  price: 24.50
+  image: "book46.jpg"

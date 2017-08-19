@@ -16,8 +16,19 @@ import (
 )
 
 func main() {
-	//userMigrate()
-	itemsMigrate()
+	if !askQuestion("Starting the migration process?") {
+		fmt.Print("Thnaks god I asked! Your DB good go away!")
+		return
+	}
+
+	if askQuestion("Migrate users?") {
+		userMigrate()
+	}
+
+	if askQuestion("Migrate items?") {
+		itemsMigrate()
+	}
+
 }
 
 // Asking a question.
@@ -51,7 +62,7 @@ func userMigrate() {
 
 	fmt.Println("migratin users")
 
-	filename, _ := filepath.Abs("./migration/users.yml")
+	filename, _ := filepath.Abs("./migration_assets/users.yml")
 	yamlFile, err := ioutil.ReadFile(filename)
 
 	if err != nil {
@@ -72,14 +83,14 @@ func userMigrate() {
 
 		// Migrate the image.
 		err := fileCopy(
-			"migration/images/users/" + user.Image,
+			"migration_assets/images/users/" + user.Image,
 			api.GetSettings().ImageDirectory + "/" + user.Image)
 
 		if err != nil {
 			panic(err)
 		}
 
-		user.Image = api.GetSettings().ImageDirectory + "users/" + user.Image
+		user.Image = strings.Replace(api.GetSettings().ImageDirectory, "./", "", -1) + user.Image
 
 		object, err := user.Insert()
 
@@ -93,8 +104,52 @@ func userMigrate() {
 	fmt.Println("All the users have been migrated. Awesome!")
 }
 
+// Migrating items.
 func itemsMigrate() {
 	fmt.Println("migratin items")
+
+	fmt.Println("Drop items table")
+	api.TableDrop("item")
+
+	fmt.Println("Create items table")
+	api.TableCreate("item")
+
+	filename, _ := filepath.Abs("./migration_assets/items.yml")
+	yamlFile, err := ioutil.ReadFile(filename)
+
+	if err != nil {
+		panic(err)
+	}
+
+	m := make(map[string]entities.Item)
+
+	err = yaml.Unmarshal(yamlFile, &m)
+	if err != nil {
+		log.Fatalf("error: %v", err)
+	}
+
+	for _, item := range m {
+		// Migrate the image.
+		err := fileCopy(
+			"migration_assets/images/items/" + item.Image,
+			api.GetSettings().ImageDirectory + "/" + item.Image)
+
+		if err != nil {
+			panic(err)
+		}
+
+		item.Image = strings.Replace(api.GetSettings().ImageDirectory, "./", "", -1) + item.Image
+
+		item.Insert()
+
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println("Migrating " + item.Title)
+	}
+
+	fmt.Println("All the items have been migrated. Awesome!")
 }
 
 // Copy file.
