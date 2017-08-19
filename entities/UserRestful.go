@@ -7,10 +7,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"store/api"
 	"log"
+	"github.com/labstack/echo"
+	"github.com/dgrijalva/jwt-go/request"
 )
 
 // Register end point.
-func UserRegister(writer http.ResponseWriter, request *http.Request) {
+func UserRegister(c echo.Context) error {
 	// Get a user input.
 	user := User{}
 	json.NewDecoder(request.Body).Decode(&user)
@@ -53,7 +55,7 @@ func UserRegister(writer http.ResponseWriter, request *http.Request) {
 }
 
 // Login the user.
-func UserLogin(writer http.ResponseWriter, request *http.Request) {
+func UserLogin(c echo.Context) error {
 	// Get a user input.
 	user := &User{}
 	json.NewDecoder(request.Body).Decode(&user)
@@ -98,7 +100,7 @@ func UserLogin(writer http.ResponseWriter, request *http.Request) {
 }
 
 // Refreshing an old token.
-func UserTokenRefresh(writer http.ResponseWriter, request *http.Request) {
+func UserTokenRefresh(c echo.Context) error {
 	// Get a user input.
 	token := &Token{}
 	json.NewDecoder(request.Body).Decode(&token)
@@ -150,7 +152,7 @@ func UserTokenRefresh(writer http.ResponseWriter, request *http.Request) {
 }
 
 // Get user details.
-func UserInfo(writer http.ResponseWriter, request *http.Request) {
+func UserInfo(c echo.Context) error {
 	token := request.Header.Get("access-token")
 	user, err := LoadUserFromDB(token)
 
@@ -171,7 +173,7 @@ func UserInfo(writer http.ResponseWriter, request *http.Request) {
 }
 
 // Adding an item to the user cart.
-func UserAddItemToCart(writer http.ResponseWriter, request *http.Request) {
+func UserAddItemToCart(c echo.Context) error {
 
 	token := request.Header.Get("access-token")
 	user, err := LoadUserFromDB(token)
@@ -204,7 +206,7 @@ func UserAddItemToCart(writer http.ResponseWriter, request *http.Request) {
 }
 
 // Removing an item from the cart.
-func UserRevokeItemFromCart(writer http.ResponseWriter, request *http.Request) {
+func UserRevokeItemFromCart(c echo.Context) error {
 	token := request.Header.Get("access-token")
 	user, err := LoadUserFromDB(token)
 
@@ -236,7 +238,7 @@ func UserRevokeItemFromCart(writer http.ResponseWriter, request *http.Request) {
 }
 
 // After the user finished with the cart, archive it.
-func UserArchiveCart(writer http.ResponseWriter, request *http.Request) {
+func UserArchiveCart(c echo.Context) error {
 	token := request.Header.Get("access-token")
 	user, err := LoadUserFromDB(token)
 

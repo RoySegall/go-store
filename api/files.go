@@ -6,10 +6,11 @@ import (
 	"log"
 	"io"
 	"github.com/gorilla/mux"
+	"github.com/labstack/echo"
 )
 
 // Serving a file.
-func ServeFile(w http.ResponseWriter, r *http.Request) {
+func ServeFile(c echo.Context) error {
 	// Pull a single item from the DB.
 	vars := mux.Vars(r)
 
