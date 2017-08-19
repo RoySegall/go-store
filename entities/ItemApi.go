@@ -17,10 +17,6 @@ func (item Item) Get(id string) (Item) {
 		return item
 	}
 
-	settings := api.GetSettings()
-
-	items[0].Image = "http://localhost" + settings.Port + "/" + items[0].Image
-
 	return items[0]
 }
 

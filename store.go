@@ -30,6 +30,9 @@ func main() {
 	r.HandleFunc("/api/cart/items", entities.UserRevokeItemFromCart).Methods(http.MethodDelete)
 	r.HandleFunc("/api/cart", entities.UserArchiveCart).Methods(http.MethodDelete)
 
+	// Handle files.
+	r.HandleFunc("/images/{file}", api.ServeFile).Methods(http.MethodGet)
+
 	color.Green("Starting server at http://localhost" + api.GetSettings().Port)
 
 	server := &http.Server{
