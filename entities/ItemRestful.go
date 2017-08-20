@@ -6,6 +6,8 @@ import (
 	"os"
 	"io"
 	"store/api"
+	"github.com/imdario/mergo"
+	"github.com/labstack/gommon/log"
 )
 
 // Get a specific item.
@@ -19,9 +21,16 @@ func ItemsGet(c echo.Context) error {
 
 // Get a specific item.
 func ItemGet(c echo.Context) error {
+
+	object := Item{}.Get(c.Param("id"))
+
+	if object.Id == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "The item does not exists any more.")
+	}
+
 	// Print the items.
 	return c.JSON(200,	map[string] Item {
-		"data": Item{}.Get(c.Param("id")),
+		"data": object,
 	})
 }
 
@@ -40,6 +49,10 @@ func ItemPost(c echo.Context) error {
 
 	if item.Price == 0 {
 		return echo.NewHTTPError(http.StatusBadRequest, "An item price cannot be 0")
+	}
+
+	if item.Description == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "The description is mandatory.")
 	}
 
 	// Before creating the entry in the DB, we need to save the image.
@@ -77,62 +90,49 @@ func ItemPost(c echo.Context) error {
 	return c.JSON(200,	item)
 }
 
-//// Update an item.
-//func ItemUpdate(c echo.Context) error {
-//	// Process variables.
-//	vars := mux.Vars(r)
-//
-//	// Old object.
-//	old_item := Item{}.Get(vars["id"])
-//
-//	// Process the new values and attach the ID to the object.
-//	item := Item{}
-//	json.NewDecoder(r.Body).Decode(&item)
-//
-//	if item.Title == "" {
-//		api.WriteError(w, "The title is required")
-//		return
-//	}
-//
-//	if item.Price == 0 {
-//		api.WriteError(w, "An item price cannot be 0")
-//		return
-//	}
-//
-//	if err := mergo.Merge(&item, old_item); err != nil {
-//		log.Print(err)
-//		api.WriteError(w, "It seems that was an error. Try again later")
-//		return
-//	}
-//
-//	// Updating.
-//	item.Update()
-//
-//	// Prepare the display.
-//	response, _ := json.Marshal(map[string] Item {
-//		"data": item,
-//	})
-//
-//	// Print, with style.
-//	w.Header().Set("Content-Type", "application/json")
-//	w.WriteHeader(http.StatusOK)
-//	w.Write(response)
-//}
-//
-//// Delete an item.
-//func ItemDelete(c echo.Context) error {
-//	// Process variables.
-//	vars := mux.Vars(r)
-//
-//	// Delete the item.
-//	Item{}.Get(vars["id"]).Delete()
-//
-//	response, _ := json.Marshal(map[string] string {
-//		"result": "deleted",
-//	})
-//
-//	// Print, with style.
-//	w.Header().Set("Content-Type", "application/json")
-//	w.WriteHeader(http.StatusOK)
-//	w.Write(response)
-//}
+// Update an item.
+func ItemUpdate(c echo.Context) error {
+	// Old object.
+	old_item := Item{}.Get(c.Param("id"))
+
+	// Processing.
+	item := new(Item)
+
+	if err := c.Bind(item); err != nil {
+		return err
+	}
+
+	// todo move to item.Validate()
+	if item.Title == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "The title is required.")
+	}
+
+	if item.Price == 0 {
+		return echo.NewHTTPError(http.StatusBadRequest, "An item price cannot be 0.")
+	}
+
+	if item.Description == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "The description is mandatory.")
+	}
+
+	if err := mergo.Merge(item, old_item); err != nil {
+		log.Print(err)
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+
+	// Updating.
+	item.Update()
+
+	// Prepare the display.
+	return c.JSON(200,	item)
+}
+
+// Delete an item.
+func ItemDelete(c echo.Context) error {
+	// Delete the item.
+	Item{}.Get(c.Param("id")).Delete()
+
+	return c.JSON(http.StatusOK, map[string] string {
+		"result": "deleted",
+	})
+}

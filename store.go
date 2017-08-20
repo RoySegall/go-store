@@ -5,17 +5,21 @@ import (
 	"github.com/fatih/color"
 	"store/api"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 func main() {
 	e := echo.New()
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+	}))
 
 	// Items.
 	e.GET("/api/items", entities.ItemsGet)
 	e.POST("/api/items", entities.ItemPost)
 	e.GET("/api/items/:id", entities.ItemGet)
-	//e.PATCH("/api/item/:id", entities.ItemUpdate)
-	//e.DELETE("/api/item/:id", entities.ItemDelete)
+	e.PATCH("/api/items/:id", entities.ItemUpdate)
+	e.DELETE("/api/items/:id", entities.ItemDelete)
 	//
 	//// User.
 	//e.GET("/api/user", entities.UserInfo)
