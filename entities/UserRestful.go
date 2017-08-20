@@ -97,58 +97,47 @@ func UserLogin(c echo.Context) error {
 		"data": matchedUser,
 	})
 }
-//
-//// Refreshing an old token.
-//func UserTokenRefresh(c echo.Context) error {
-//	// Get a user input.
-//	token := &Token{}
-//	json.NewDecoder(request.Body).Decode(&token)
-//
-//	if token.RefreshToken == "" {
-//		// A token cannot be empty. Notify the client about that.
-//		api.WriteError(writer, "The refresh token cannot be empty")
-//		return
-//	}
-//
-//	// Query from the DB.
-//	res, err := r.DB("store").Table("user").Filter(map[string]interface{} {
-//		"Token": map[string]interface{} {
-//			"RefreshToken": token.RefreshToken,
-//		},
-//	}).Run(api.GetSession())
-//
-//	if err != nil {
-//		log.Print(err)
-//		api.WriteError(writer, "It seems there was an error. Try again later")
-//		return
-//	}
-//
-//	// Prepare the result from the DB.
-//	DbUsers := []User{}
-//	res.All(&DbUsers)
-//
-//	if len(DbUsers) == 0 {
-//		api.WriteError(writer, "There is no user with that refresh token. Try again.")
-//		return
-//	}
-//
-//	matchedUser := DbUsers[0]
-//
-//	// Create a new token for the user.
-//	new_token := Token{}
-//	new_token.Generate(matchedUser)
-//	matchedUser.Token = new_token
-//	matchedUser.Update()
-//
-//	// Display the user.
-//	response, _ := json.Marshal(map[string] User {
-//		"data": matchedUser,
-//	})
-//
-//	writer.Header().Set("Content-Type", "application/json")
-//	writer.WriteHeader(http.StatusOK)
-//	writer.Write(response)
-//}
+
+// Refreshing an old token.
+func UserTokenRefresh(c echo.Context) error {
+
+	refresh_token := c.FormValue("refresh_token")
+	if refresh_token == "" {
+		// A token cannot be empty. Notify the client about that.
+		return echo.NewHTTPError(http.StatusBadRequest, "The refresh token cannot be empty")
+	}
+
+	// Query from the DB.
+	res, err := r.DB("store").Table("user").Filter(map[string]interface{} {
+		"Token": map[string]interface{} {
+			"RefreshToken": refresh_token,
+		},
+	}).Run(api.GetSession())
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "It seems there was an error. Try again later")
+	}
+
+	// Prepare the result from the DB.
+	DbUsers := []User{}
+	res.All(&DbUsers)
+
+	if len(DbUsers) == 0 {
+		return echo.NewHTTPError(http.StatusBadRequest, "There is no user with that refresh token. Try again.")
+	}
+
+	matchedUser := DbUsers[0]
+
+	// Create a new token for the user.
+	new_token := Token{}
+	new_token.Generate(matchedUser)
+	matchedUser.Token = new_token
+	matchedUser.Update()
+
+	return c.JSON(http.StatusOK, map[string] User {
+		"data": matchedUser,
+	})
+}
 
 // Get user details.
 func UserInfo(c echo.Context) error {

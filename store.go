@@ -20,8 +20,8 @@ func main() {
 	e.GET("/api/items/:id", entities.ItemGet)
 	e.PATCH("/api/items/:id", entities.ItemUpdate)
 	e.DELETE("/api/items/:id", entities.ItemDelete)
-	//
-	//// User.
+
+	// User.
 	e.GET("/api/user", entities.UserInfo)
 	e.POST("/api/user", entities.UserRegister)
 	e.POST("/api/user/login", entities.UserLogin)
