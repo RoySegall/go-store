@@ -2,10 +2,10 @@ package entities
 
 type User struct {
 	Id string `json,gorethink:"id"`
-	Username string `json,gorethink:"username"`
-	Password string
-	Email string `yml:"email"`
-	Image string `yml:"Image"`
+	Username string `json,gorethink:"username" form:"username"`
+	Password string `form:"password"`
+	Email string `yml:"email" form:"email"`
+	Image string `yml:"Image" form:"image"`
 	Role Role `json,gorethink:"role"`
 	Token Token
 	Cart Cart `json,gorethink:"cart"`

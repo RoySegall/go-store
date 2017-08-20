@@ -1,15 +1,13 @@
 package entities
 
-//import (
-//	r "gopkg.in/gorethink/gorethink.v3"
-//	"net/http"
-//	"encoding/json"
-//	"golang.org/x/crypto/bcrypt"
-//	"store/api"
-//	"log"
-//	"github.com/labstack/echo"
-//	"github.com/dgrijalva/jwt-go/request"
-//)
+import (
+	r "gopkg.in/gorethink/gorethink.v3"
+	"net/http"
+	"golang.org/x/crypto/bcrypt"
+	"store/api"
+	"log"
+	"github.com/labstack/echo"
+)
 
 //// Register end point.
 //func UserRegister(c echo.Context) error {
@@ -54,50 +52,54 @@ package entities
 //	writer.Write(response)
 //}
 //
-//// Login the user.
-//func UserLogin(c echo.Context) error {
-//	// Get a user input.
-//	user := &User{}
-//	json.NewDecoder(request.Body).Decode(&user)
-//
-//	res, err := r.DB("store").Table("user").Filter(map[string]interface{} {
-//		"Username": user.Username,
-//	}).Run(api.GetSession())
-//
-//	// Check if the username exists.
-//	if err != nil {
-//		log.Print(err)
-//		api.WriteError(writer, "The password and the user are wrong. Try again please.")
-//		return
-//	}
-//
-//	// Prepare the result from the DB.
-//	DbUsers := []User{}
-//	res.All(&DbUsers)
-//	matchedUser := DbUsers[0]
-//
-//	err = bcrypt.CompareHashAndPassword([]byte(matchedUser.Password), []byte(user.Password))
-//
-//	if err != nil {
-//		api.WriteError(writer, "The password and the user are wrong. Try again please.")
-//		return
-//	}
-//
-//	// Create a new token for the user.
-//	token := Token{}
-//	token.Generate(matchedUser)
-//	matchedUser.Token = token
-//	matchedUser.Update()
-//
-//	// Display the user.
-//	response, _ := json.Marshal(map[string] User {
-//		"data": matchedUser,
-//	})
-//
-//	writer.Header().Set("Content-Type", "application/json")
-//	writer.WriteHeader(http.StatusOK)
-//	writer.Write(response)
-//}
+// Login the user.
+func UserLogin(c echo.Context) error {
+
+	if c.FormValue("username") == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "You must provide a username.")
+	}
+
+	if c.FormValue("password") == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "You must provide password")
+	}
+
+	res, err := r.DB("store").Table("user").Filter(map[string]interface{} {
+		"Username": c.FormValue("username"),
+	}).Run(api.GetSession())
+
+	// Check if the username exists.
+	if err != nil {
+		log.Print(err)
+		return echo.NewHTTPError(http.StatusBadRequest, "Cannot find a matching user.")
+	}
+
+	// Prepare the result from the DB.
+	DbUsers := []User{}
+	res.All(&DbUsers)
+
+	if len(DbUsers) == 0 {
+		return echo.NewHTTPError(http.StatusBadRequest, "Cannot find a matching user.")
+	}
+
+	matchedUser := DbUsers[0]
+
+	err = bcrypt.CompareHashAndPassword([]byte(matchedUser.Password), []byte(c.FormValue("password")))
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "The password or the user are wrong. Try again please.")
+	}
+
+	// Create a new token for the user.
+	token := Token{}
+	token.Generate(matchedUser)
+	matchedUser.Token = token
+	matchedUser.Update()
+
+	// Display the user.
+	return c.JSON(http.StatusOK, map[string] User {
+		"data": matchedUser,
+	})
+}
 //
 //// Refreshing an old token.
 //func UserTokenRefresh(c echo.Context) error {
