@@ -22,10 +22,10 @@ func main() {
 	e.DELETE("/api/items/:id", entities.ItemDelete)
 	//
 	//// User.
-	//e.GET("/api/user", entities.UserInfo)
-	//e.POST("/api/user", entities.UserRegister)
+	e.GET("/api/user", entities.UserInfo)
+	e.POST("/api/user", entities.UserRegister)
 	e.POST("/api/user/login", entities.UserLogin)
-	//e.POST("/api/user/token_refresh", entities.UserTokenRefresh)
+	e.POST("/api/user/token_refresh", entities.UserTokenRefresh)
 	//
 	//// Cart management.
 	//e.POST("/api/cart/items", entities.UserAddItemToCart)

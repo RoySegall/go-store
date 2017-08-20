@@ -9,49 +9,46 @@ import (
 	"github.com/labstack/echo"
 )
 
-//// Register end point.
-//func UserRegister(c echo.Context) error {
-//	// Get a user input.
-//	user := User{}
-//	json.NewDecoder(request.Body).Decode(&user)
-//
-//	if user.Username == "" || len(user.Username) < 3 {
-//		api.WriteError(writer, "Username cannot be empty or less than 3 characters")
-//		return
-//	}
-//
-//	if user.Password == "" || len(user.Password) < 6 {
-//		api.WriteError(writer, "Password cannot be empty or less than 6 characters")
-//		return
-//	}
-//
-//	bytes, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
-//
-//	// Construct a safe object.
-//	clean_user := User {
-//		Username: user.Username,
-//		Password: string(bytes),
-//	}
-//
-//	// Create the user.
-//	clean_user, err := clean_user.Insert()
-//
-//	// Print the items.
-//	if err != nil {
-//		s := err.Error()
-//		api.WriteError(writer, s)
-//		return
-//	}
-//
-//	response, _ := json.Marshal(map[string] User {
-//		"data": clean_user,
-//	})
-//
-//	writer.Header().Set("Content-Type", "application/json")
-//	writer.WriteHeader(http.StatusOK)
-//	writer.Write(response)
-//}
-//
+// Register end point.
+func UserRegister(c echo.Context) error {
+	// Get a user input.
+	user := new(User)
+	c.Bind(user)
+
+	if err := c.Bind(user); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+
+	if user.Username == "" || len(user.Username) < 3 {
+		return echo.NewHTTPError(http.StatusBadRequest, "Username cannot be empty or less than 3 characters.")
+	}
+
+	if user.Password == "" || len(user.Password) < 6 {
+		return echo.NewHTTPError(http.StatusBadRequest, "Password cannot be empty or less than 6 characters.")
+	}
+
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+
+	// Construct a safe object.
+	clean_user := User {
+		Username: user.Username,
+		Password: string(bytes),
+	}
+
+	// Create the user.
+	clean_user, err := clean_user.Insert()
+
+	// Print the items.
+	if err != nil {
+		s := err.Error()
+		return echo.NewHTTPError(http.StatusBadRequest, s)
+	}
+
+	return c.JSON(http.StatusOK, map[string] User {
+		"data": clean_user,
+	})
+}
+
 // Login the user.
 func UserLogin(c echo.Context) error {
 
@@ -152,28 +149,23 @@ func UserLogin(c echo.Context) error {
 //	writer.WriteHeader(http.StatusOK)
 //	writer.Write(response)
 //}
-//
-//// Get user details.
-//func UserInfo(c echo.Context) error {
-//	token := request.Header.Get("access-token")
-//	user, err := LoadUserFromDB(token)
-//
-//	if err != nil {
-//		s := err.Error()
-//		api.WriteError(writer, s)
-//		return
-//	}
-//
-//	// Display the user.
-//	response, _ := json.Marshal(map[string] User {
-//		"data": user,
-//	})
-//
-//	writer.Header().Set("Content-Type", "application/json")
-//	writer.WriteHeader(http.StatusOK)
-//	writer.Write(response)
-//}
-//
+
+// Get user details.
+func UserInfo(c echo.Context) error {
+	token := c.Request().Header.Get("access-token")
+	user, err := LoadUserFromDB(token)
+
+	if err != nil {
+		s := err.Error()
+		return echo.NewHTTPError(http.StatusBadRequest, s)
+	}
+
+	// Display the user.
+	return c.JSON(http.StatusOK, map[string] User {
+		"data": user,
+	})
+}
+
 //// Adding an item to the user cart.
 //func UserAddItemToCart(c echo.Context) error {
 //
