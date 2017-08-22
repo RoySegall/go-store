@@ -27,11 +27,11 @@ func main() {
 	e.POST("/api/user/login", entities.UserLogin)
 	e.POST("/api/user/token_refresh", entities.UserTokenRefresh)
 
-	//// Cart management.
-	//e.POST("/api/cart/items", entities.UserAddItemToCart)
-	//e.DELETE("/api/cart/items", entities.UserRevokeItemFromCart)
-	//e.DELETE("/api/cart", entities.UserArchiveCart)
-	//
+	// Cart management.
+	e.POST("/api/cart/items", entities.UserAddItemToCart)
+	e.DELETE("/api/cart/items", entities.UserRevokeItemFromCart)
+	e.DELETE("/api/cart", entities.UserArchiveCart)
+
 	// Handle files.
 	e.GET("/images/:file", api.ServeFile)
 
