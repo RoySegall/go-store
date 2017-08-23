@@ -86,8 +86,12 @@ func ItemPost(c echo.Context) error {
 	// Adding the ID to the object.
 	item.Id = id
 
+	new_item := Item{}.Get(id)
+
 	// Prepare the display.
-	return c.JSON(200, item)
+	return c.JSON(200, map[string] Item {
+		"data": new_item,
+	})
 }
 
 // Update an item.
@@ -124,7 +128,12 @@ func ItemUpdate(c echo.Context) error {
 	item.Update()
 
 	// Prepare the display.
-	return c.JSON(200, item)
+	new_item := Item{}.Get(item.Id)
+
+	// Prepare the display.
+	return c.JSON(200, map[string] Item {
+		"data": new_item,
+	})
 }
 
 // Delete an item.
