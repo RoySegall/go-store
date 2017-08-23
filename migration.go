@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"os"
-	"fmt"
+	r "gopkg.in/gorethink/gorethink.v3"
 	"strings"
 	"store/api"
 	"path/filepath"
@@ -13,11 +13,12 @@ import (
 	"log"
 	"golang.org/x/crypto/bcrypt"
 	"io"
+	"github.com/fatih/color"
 )
 
 func main() {
 	if !askQuestion("Starting the migration process?") {
-		fmt.Print("Thnaks god I asked! Your DB good go away!")
+		color.Red("Thanks god I asked! Your DB could go away!")
 		return
 	}
 
@@ -35,13 +36,13 @@ func main() {
 func askQuestion(question string) bool {
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Println(question + " Y/n")
+	color.Green(question + " Y/n")
 
 	option, _ := reader.ReadString('\n')
 	option = strings.TrimSpace(option)
 
 	if !api.InArray([]string{"y", "Y", "n", "N"}, option) {
-		fmt.Println("Not a valid option. Skipping")
+		color.Yellow("Not a valid option. Skipping")
 		return false
 	}
 
@@ -53,14 +54,10 @@ func askQuestion(question string) bool {
 }
 
 func userMigrate() {
+	color.Red("Truncate users table")
+	r.DB("store").Table("user").Delete().Run(api.GetSession())
 
-	fmt.Println("Drop users table")
-	api.TableDrop("user")
-
-	fmt.Println("Create users table")
-	api.TableCreate("user")
-
-	fmt.Println("migratin users")
+	color.Green("Migrating users")
 
 	filename, _ := filepath.Abs("./migration_assets/users.yml")
 	yamlFile, err := ioutil.ReadFile(filename)
@@ -98,21 +95,18 @@ func userMigrate() {
 			panic(err)
 		}
 
-		fmt.Println("Migrating " + object.Username)
+		color.Yellow("Migrating " + object.Username)
 	}
 
-	fmt.Println("All the users have been migrated. Awesome!")
+	color.Green("All the users have been migrated. Awesome!")
 }
 
 // Migrating items.
 func itemsMigrate() {
-	fmt.Println("migratin items")
+	color.Red("Truncate items table")
+	r.DB("store").Table("item").Delete().Run(api.GetSession())
 
-	fmt.Println("Drop items table")
-	api.TableDrop("item")
-
-	fmt.Println("Create items table")
-	api.TableCreate("item")
+	color.Yellow("Migrating items")
 
 	filename, _ := filepath.Abs("./migration_assets/items.yml")
 	yamlFile, err := ioutil.ReadFile(filename)
@@ -146,10 +140,10 @@ func itemsMigrate() {
 			panic(err)
 		}
 
-		fmt.Println("Migrating " + item.Title)
+		color.Yellow("Migrating " + item.Title)
 	}
 
-	fmt.Println("All the items have been migrated. Awesome!")
+	color.Green("All the items have been migrated. Awesome!")
 }
 
 // Copy file.

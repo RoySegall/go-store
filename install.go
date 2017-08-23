@@ -14,7 +14,7 @@ func main() {
 
 	color.Yellow("Starting to create tables.")
 
-	for _, table := range []string{"item", "users"} {
+	for _, table := range []string{"item", "user"} {
 		api.TableCreate(table)
 		color.Green("The %s table has created.\n", table)
 	}
