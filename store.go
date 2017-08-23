@@ -1,44 +1,41 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
-	"net/http"
 	"store/entities"
 	"github.com/fatih/color"
 	"store/api"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 func main() {
-
-	r := mux.NewRouter()
+	e := echo.New()
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+	}))
 
 	// Items.
-	r.HandleFunc("/api/items", entities.ItemsGet).Methods(http.MethodGet)
-	r.HandleFunc("/api/item", entities.ItemPost).Methods(http.MethodPost)
-	r.HandleFunc("/api/item/{id}", entities.ItemGet).Methods(http.MethodGet)
-	r.HandleFunc("/api/item/{id}", entities.ItemUpdate).Methods(http.MethodPatch)
-	r.HandleFunc("/api/item/{id}", entities.ItemDelete).Methods(http.MethodDelete)
+	e.GET("/api/items", entities.ItemsGet)
+	e.POST("/api/items", entities.ItemPost)
+	e.GET("/api/items/:id", entities.ItemGet)
+	e.PATCH("/api/items/:id", entities.ItemUpdate)
+	e.DELETE("/api/items/:id", entities.ItemDelete)
 
 	// User.
-	r.HandleFunc("/api/user", entities.UserInfo).Methods(http.MethodGet)
-	r.HandleFunc("/api/user", entities.UserRegister).Methods(http.MethodPost)
-	r.HandleFunc("/api/user/login", entities.UserLogin).Methods(http.MethodPost)
-	r.HandleFunc("/api/user/token_refresh", entities.UserTokenRefresh).Methods(http.MethodPost)
+	e.GET("/api/user", entities.UserInfo)
+	e.POST("/api/user", entities.UserRegister)
+	e.POST("/api/user/login", entities.UserLogin)
+	e.POST("/api/user/token_refresh", entities.UserTokenRefresh)
 
 	// Cart management.
-	r.HandleFunc("/api/cart/items", entities.UserAddItemToCart).Methods(http.MethodPost)
-	r.HandleFunc("/api/cart/items", entities.UserRevokeItemFromCart).Methods(http.MethodDelete)
-	r.HandleFunc("/api/cart", entities.UserArchiveCart).Methods(http.MethodDelete)
+	e.POST("/api/cart/items", entities.UserAddItemToCart)
+	e.DELETE("/api/cart/items", entities.UserRevokeItemFromCart)
+	e.DELETE("/api/cart", entities.UserArchiveCart)
 
 	// Handle files.
-	r.HandleFunc("/images/{file}", api.ServeFile).Methods(http.MethodGet)
+	e.GET("/images/:file", api.ServeFile)
 
 	color.Green("Starting server at http://localhost" + api.GetSettings().Port)
 
-	server := &http.Server{
-		Addr: api.GetSettings().Port,
-		Handler: r,
-	}
-
-	server.ListenAndServe()
+	e.Start(api.GetSettings().Port)
 }
