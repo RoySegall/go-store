@@ -29,7 +29,7 @@ func ItemGet(c echo.Context) error {
 	}
 
 	// Print the items.
-	return c.JSON(200,	map[string] Item {
+	return c.JSON(200, map[string] Item {
 		"data": object,
 	})
 }
@@ -40,7 +40,7 @@ func ItemPost(c echo.Context) error {
 	item := new(Item)
 
 	if err := c.Bind(item); err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
 	if item.Title == "" {
@@ -63,7 +63,7 @@ func ItemPost(c echo.Context) error {
 
 	src, err := file.Open()
 	if err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 	defer src.Close()
 
@@ -87,7 +87,7 @@ func ItemPost(c echo.Context) error {
 	item.Id = id
 
 	// Prepare the display.
-	return c.JSON(200,	item)
+	return c.JSON(200, item)
 }
 
 // Update an item.
@@ -99,7 +99,7 @@ func ItemUpdate(c echo.Context) error {
 	item := new(Item)
 
 	if err := c.Bind(item); err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
 	// todo move to item.Validate()
@@ -124,7 +124,7 @@ func ItemUpdate(c echo.Context) error {
 	item.Update()
 
 	// Prepare the display.
-	return c.JSON(200,	item)
+	return c.JSON(200, item)
 }
 
 // Delete an item.
