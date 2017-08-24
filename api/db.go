@@ -42,7 +42,7 @@ func Get(table string, id string) (*r.Cursor) {
 }
 
 func GetAll(table string) (*r.Cursor) {
-	res, err := r.Table(table).Run(GetSession())
+	res, err := r.Table(table).OrderBy("id").Run(GetSession())
 
 	if err != nil {
 		panic(err)

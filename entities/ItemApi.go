@@ -30,7 +30,8 @@ func (item Item) GetAll() ([]Item) {
 		return items
 	}
 
-	return items
+	// todo: handle a pager.
+	return items[0:9]
 }
 
 // Delete an item.
