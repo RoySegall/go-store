@@ -8,14 +8,44 @@ import (
 	"store/api"
 	"github.com/imdario/mergo"
 	"github.com/labstack/gommon/log"
+	r "gopkg.in/gorethink/gorethink.v3"
+ 	"strconv"
 )
 
 // Get a specific item.
 func ItemsGet(c echo.Context) error {
 
+	perpage := 9
+	var page int
+	if c.QueryParam("page") == "" {
+		page = 1
+	} else {
+		page, _ = strconv.Atoi(c.QueryParam("page"))
+	}
+
+	start := perpage * page
+	res, err := r.Table("item").OrderBy("id").Slice(start, start + perpage).Run(api.GetSession())
+	number_of_items, err := r.Table("item").OrderBy("id").Count().Run(api.GetSession())
+
+	var rows []interface{}
+	number_of_items.All(&rows)
+
+	if err != nil {
+		return echo.NewHTTPError(500, err)
+	}
+
+	items := []Item{}
+	res.All(&items)
+
+	if len(items) == 0 {
+		return echo.NewHTTPError(http.StatusBadRequest, map[string] string {"error": "No items"})
+	}
+
 	// Print out the
-	return c.JSON(200, map[string] []Item {
-		"data": Item{}.GetAll(),
+	return c.JSON(200, map[string]interface{} {
+		"data": items,
+		"items": rows[0],
+		"perpage": perpage,
 	})
 }
 
