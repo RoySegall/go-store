@@ -18,7 +18,7 @@ func ItemsGet(c echo.Context) error {
 	perpage := 9
 	var page int
 	if c.QueryParam("page") == "" {
-		page = 1
+		page = 0
 	} else {
 		page, _ = strconv.Atoi(c.QueryParam("page"))
 	}
