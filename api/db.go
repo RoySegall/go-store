@@ -52,7 +52,7 @@ func GetAll(table string) (*r.Cursor) {
 }
 
 func Update(table string, object interface{}) (*r.Cursor) {
-	res, err := r.Table(table).Update(object).Run(GetSession())
+	res, err := r.Table(table).Filter(object).Update(object).Run(GetSession())
 
 	if err != nil {
 		panic(err)
