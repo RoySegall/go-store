@@ -1,6 +1,9 @@
 # Requirements
 
-First, you'll need [RethinkDB](https://www.rethinkdb.com) running in the background.
+First, you'll need [RethinkDB](https://www.rethinkdb.com) running in the background. After installing RethinkDB just run
+```
+rethinkdb --http-port 8877
+```
 
 # OpenSSL keys.
 ```
