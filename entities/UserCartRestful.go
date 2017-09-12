@@ -11,7 +11,7 @@ func UserAddItemToCart(c echo.Context) error {
 	user, err := LoadUserFromDB(c.Request().Header.Get("access-token"))
 
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err)
+		return echo.NewHTTPError(http.StatusBadRequest, "There is not matching user. Maybe a bas access token?")
 	}
 
 	// Get a user input.

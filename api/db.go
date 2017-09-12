@@ -2,6 +2,7 @@ package api
 
 import (
 	r "gopkg.in/gorethink/gorethink.v3"
+	"reflect"
 )
 
 func GetSession() (*r.Session) {
@@ -52,7 +53,7 @@ func GetAll(table string) (*r.Cursor) {
 }
 
 func Update(table string, object interface{}) (*r.Cursor) {
-	res, err := r.Table(table).Filter(object).Update(object).Run(GetSession())
+	res, err := r.Table(table).Get(reflect.Indirect(reflect.ValueOf(object))).Update(object).Run(GetSession())
 
 	if err != nil {
 		panic(err)
