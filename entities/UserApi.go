@@ -137,7 +137,7 @@ func (user User) Insert() (User, error) {
 
 // Update the user object.
 func (user User) Update() {
-	api.Update("user", user)
+	api.Update("user", user.Id, user)
 }
 
 // Load user from DB.

@@ -40,5 +40,5 @@ func (item Item) Delete() {
 
 // Update an item.
 func (item Item) Update() {
-	api.Update("item", item)
+	api.Update("item", item.Id, item)
 }
