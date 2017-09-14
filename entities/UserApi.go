@@ -185,6 +185,13 @@ func (user *User) RevokeItemFromCart(itemId string) {
 	user.Cart.Items = items
 }
 
+// Clear the cart.
+func (user *User) ClearCart() {
+
+	var items []Item
+	user.Cart.Items = items
+}
+
 // Tak the current cart and archive it.
 func (user *User) ArchiveCart() {
 	user.PastCarts = append(user.PastCarts, user.Cart)

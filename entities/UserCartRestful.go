@@ -60,6 +60,23 @@ func UserRevokeItemFromCart(c echo.Context) error {
 	})
 }
 
+// Clear the cart.
+func UserClearCart(c echo.Context) error {
+	user, err := LoadUserFromDB(c.Request().Header.Get("access-token"))
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+
+	// Get a user input.
+
+	user.ClearCart()
+	user.Update()
+	return c.JSON(http.StatusOK, map[string]string{
+		"message": "The cart has cleared.",
+	})
+}
+
 // After the user finished with the cart, archive it.
 func UserArchiveCart(c echo.Context) error {
 	user, err := LoadUserFromDB(c.Request().Header.Get("access-token"))

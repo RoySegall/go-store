@@ -30,6 +30,7 @@ func main() {
 	// Cart management.
 	e.POST("/api/cart/items", entities.UserAddItemToCart)
 	e.DELETE("/api/cart/items", entities.UserRevokeItemFromCart)
+	e.DELETE("/api/cart/items/remove", entities.UserClearCart)
 	e.DELETE("/api/cart", entities.UserArchiveCart)
 
 	// Handle files.
